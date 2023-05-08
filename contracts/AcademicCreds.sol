@@ -11,7 +11,15 @@ contract AcademicCreds is ERC1155, Ownable {
     uint256 public constant TRANSCRIPT = 0;
     uint256 public constant DIPLOMA = 1;
 
+    uint256 public NEXT_SCHOOL_ID = 1;
+    uint256 public NEXT_STUDENT_ID = 1;
+
     string public baseURI;
+
+    // Every school registered with the system will get an ID > 0
+    mapping(address => uint256) public registeredSchools;
+    // Every student who receives a credential will get an ID > 0
+    mapping(address => uint256) public registeredStudents;
 
     constructor(
         string memory _baseURI
@@ -33,10 +41,32 @@ contract AcademicCreds is ERC1155, Ownable {
         _setURI(newuri);
     }
 
+    // allow the owner to register schools into the system
+    function registerSchool(address account) public onlyOwner 
+        returns (uint256)
+    {
+        if (registeredSchools[account] == 0) 
+        {
+            registeredSchools[account] = NEXT_SCHOOL_ID;
+            NEXT_SCHOOL_ID++;
+        }
+
+        return registeredSchools[account];
+    }
+
     function mint(address account, uint256 id, uint256 amount, bytes memory data)
         public
         onlyOwner
     {
+        // ensure minter is in the system
+        require(registeredSchools[msg.sender] > 0, "Must have an ID to issue a token");
+
+        // add receiving account to the registered students
+        if (registeredStudents[account] == 0) {
+            registeredStudents[account] = NEXT_STUDENT_ID;
+            NEXT_STUDENT_ID++;
+        }
+
         _mint(account, id, amount, data);
     }
 
