@@ -7,18 +7,23 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract AcademicCreds is ERC1155, Ownable {
 
-    constructor() ERC1155("") {
-        //   ERC1155(uri_)  ... the uri is for a "base" URI for the metadata.
-        //                      we won't have a URI since using IPFS hash for
-        //                      each individual NFT token
-        //                      We may need to put the IPFS node URI here!!??
+    // Manage 2 different NFT tokens representing types of academic credentials
+    uint256 public constant TRANSCRIPT = 0;
+    uint256 public constant DIPLOMA = 1;
 
+    string public baseURI;
 
-        //  Our constructor should also set up the 2 token ID's:
-        //      Transcript Tokens
-        //      Diploma Tokens
+    constructor(
+        string memory _baseURI
+    ) ERC1155(_baseURI) {
 
-        // Code goes here...
+        //   ERC1155(uri)   ... the uri is for a "base" URI for the metadata.
+        //                      will we have a URI since using IPFS hash for
+        //                      each individual NFT token?
+        //                      We may need to use the IPFS node URI here!!??
+        baseURI = _baseURI;
+
+        // Code goes here...  nothing else needed to initialize on deploy??
 
     }
 
@@ -53,7 +58,7 @@ contract AcademicCreds is ERC1155, Ownable {
     //
 
     function setApprovalForAll(address operator, bool approved)
-        external
+        public override
     {
         // might rewrite this to approve for VIEWING the tokens only??
         // otherwise, should just fail with error
@@ -66,8 +71,8 @@ contract AcademicCreds is ERC1155, Ownable {
     }
 
     function isApprovedForAll(address account, address operator)
-        external
-        returns(bool)
+        public view override
+        returns (bool)
     {
         // if we use approvals for VIEWING the tokens, this will return true
 
@@ -82,9 +87,9 @@ contract AcademicCreds is ERC1155, Ownable {
             address to,
             uint256 id,
             uint256 amount,
-            bytes data
+            bytes memory data
         )
-        external
+        public override
     {
 
         // Transfer functions should fail; 'token is not transferrable'
@@ -100,11 +105,11 @@ contract AcademicCreds is ERC1155, Ownable {
         (
             address from,
             address to,
-            uint256[] ids,
-            uint256[] amounts,
-            bytes data
+            uint256[] memory ids,
+            uint256[] memory amounts,
+            bytes memory data
         )
-        external
+        public override
     {
         // Transfer functions should fail; 'token is not transferrable'
         // if 'to' != '0x0' then
@@ -143,7 +148,7 @@ contract AcademicCreds is ERC1155, Ownable {
         _burn(from, id, amount);
     }
 
-    function burnBatch(address from, uint256[] ids, uint256[] amounts)
+    function burnBatch(address from, uint256[] memory ids, uint256[] memory amounts)
         public
     {
         // batched version of burn
