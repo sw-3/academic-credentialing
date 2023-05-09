@@ -4,6 +4,8 @@ const { ethers } = require('hardhat');
 describe('AcademicCreds', () => {
 
   const BASE_URI = 'ipfs://'
+  const TRANSCRIPT = 0
+  const DIPLOMA = 1
 
   let nft,
       deployer,
@@ -86,12 +88,39 @@ describe('AcademicCreds', () => {
 
   })
 
-  describe('Minting Credentials', () => {
-    // only registered school can mint
-    // student added to registered students
+  describe('Issuing Credentials', () => {
+    let transaction, result
+
+    describe('Success', async () => {
+
+      beforeEach(async () => {
+        transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
+        result = await transaction.wait()
+        transaction =
+          await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
+        result = await transaction.wait()
+      })
+
+      it('adds student to registeredStudents mapping', async () => {
+        expect(await academicCreds.registeredStudents(student1.address)).to.equal(1)
+      })
+
+
     // transcript token owned by student
     
+    })
+
+    describe('Failure', async () => {
+
+      it('prevents non-registered school from minting', async () => {
+        await expect(
+          academicCreds.connect(school2).issueCredential(student2.address, TRANSCRIPT, '0x')).to.be.reverted
+      })
+
+
+
+        // only registered school can mint
+    })
+
   })
-
-
 })

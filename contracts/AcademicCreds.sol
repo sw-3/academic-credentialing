@@ -83,17 +83,23 @@ contract AcademicCreds is ERC1155, Ownable {
         return (!compareStrs(registeredSchools[_account], ""));
     }
 
-    function mint
+    // function issueCredential
+    // ------------------------------------------------------------------------
+    // Allows a school to issue a transcript or diploma to a student.
+    // (Utilizes the ERC1155 token _mint() function.)
+    // ------------------------------------------------------------------------
+    function issueCredential
         (
             address _account,
             uint256 _id,
-            uint256 _amount,
             bytes memory _data
         )
-        public onlyOwner
+        public
     {
         // ensure minter is a registered school
         require(isSchool(msg.sender), "Must be a registered school.");
+
+        uint256 amount = 1;  // issues 1 credential at a time
 
         // add receiving account to the registered students
         if (registeredStudents[_account] == 0) {
@@ -101,7 +107,7 @@ contract AcademicCreds is ERC1155, Ownable {
             NEXT_STUDENT_ID++;
         }
 
-        _mint(_account, _id, _amount, _data);
+        _mint(_account, _id, amount, _data);
     }
 
     // I don't *think* we need mintBatch .. a school is issuing 1 credential at a time?
