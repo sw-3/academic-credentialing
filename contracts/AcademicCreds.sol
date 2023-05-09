@@ -17,9 +17,11 @@ contract AcademicCreds is ERC1155, Ownable {
     string public baseURI;
 
     // Every school registered with the system will get an ID > 0
-    mapping(address => uint256) public registeredSchools;
+    mapping(address => string) public registeredSchools;
     // Every student who receives a credential will get an ID > 0
     mapping(address => uint256) public registeredStudents;
+
+    event RegisterSchool(address account, string schoolName);
 
     constructor(
         string memory _baseURI
@@ -37,37 +39,69 @@ contract AcademicCreds is ERC1155, Ownable {
 
     // allows owner to update the base URI where metadata is located
     // this will only be needed if the base URI is an IPFS node that could change
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
+    function setURI(string memory _newuri) public onlyOwner {
+        _setURI(_newuri);
     }
 
-    // allow the owner to register schools into the system
-    function registerSchool(address account) public onlyOwner 
-        returns (uint256)
+    // function to compare 2 strings; if equal returns true
+    function compareStrs
+        (
+            string memory str1,
+            string memory str2
+        )
+        public pure returns (bool)
     {
-        if (registeredSchools[account] == 0) 
-        {
-            registeredSchools[account] = NEXT_SCHOOL_ID;
-            NEXT_SCHOOL_ID++;
+        if (bytes(str1).length != bytes(str2).length) {
+            return false;
         }
-
-        return registeredSchools[account];
+        return keccak256(abi.encodePacked(str1)) == keccak256(abi.encodePacked(str2));
     }
 
-    function mint(address account, uint256 id, uint256 amount, bytes memory data)
-        public
-        onlyOwner
+    // allow contract owner to register schools into the system
+    function registerSchool
+        (
+            address _account,
+            string memory _schoolName
+        )
+        public onlyOwner
     {
-        // ensure minter is in the system
-        require(registeredSchools[msg.sender] > 0, "Must have an ID to issue a token");
+        // must provide a name
+        require(!compareStrs(_schoolName, ""), "Must provide a school name.");
+
+        // must not be account 0 -- fix this!
+        //require(_account != "0x0", "Invalid account provided.");
+
+        // add school acount/name to the mapping
+        registeredSchools[_account] = _schoolName;
+
+        // emit event
+        emit RegisterSchool(_account, _schoolName);
+    }
+
+    function isSchool(address _account) public view returns (bool)
+    {
+        return (!compareStrs(registeredSchools[_account], ""));
+    }
+
+    function mint
+        (
+            address _account,
+            uint256 _id,
+            uint256 _amount,
+            bytes memory _data
+        )
+        public onlyOwner
+    {
+        // ensure minter is a registered school
+        require(isSchool(msg.sender), "Must be a registered school.");
 
         // add receiving account to the registered students
-        if (registeredStudents[account] == 0) {
-            registeredStudents[account] = NEXT_STUDENT_ID;
+        if (registeredStudents[_account] == 0) {
+            registeredStudents[_account] = NEXT_STUDENT_ID;
             NEXT_STUDENT_ID++;
         }
 
-        _mint(account, id, amount, data);
+        _mint(_account, _id, _amount, _data);
     }
 
     // I don't *think* we need mintBatch .. a school is issuing 1 credential at a time?
@@ -108,7 +142,7 @@ contract AcademicCreds is ERC1155, Ownable {
 
         // if we don't use approvals at all, this should just return false
 
-        return false;
+        //return false;
     }
 
     function safeTransferFrom

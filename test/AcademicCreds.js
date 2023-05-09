@@ -7,9 +7,16 @@ describe('AcademicCreds', () => {
 
   let nft,
       deployer,
-      minter
+      school1, school2, school3,
+      student1, student2, student3, student4
+
+  const school1Name = "Harvard University"
+  const school2Name = "Montana State University"
+  const school3Name = "Oral Roberts University"
 
   beforeEach(async () => {
+
+    // fetch accounts
     let accounts = await ethers.getSigners()
     deployer = accounts[0]
     school1 = accounts[1]
@@ -19,14 +26,14 @@ describe('AcademicCreds', () => {
     student2 = accounts[5]
     student3 = accounts[6]
     student4 = accounts[7]
+
+    // deploy contract
+    const AcademicCreds = await ethers.getContractFactory('AcademicCreds')
+    academicCreds = await AcademicCreds.deploy(BASE_URI)
+
   })
 
   describe('Deployment', () => {
-
-    beforeEach(async () => {
-      const AcademicCreds = await ethers.getContractFactory('AcademicCreds')
-      academicCreds = await AcademicCreds.deploy(BASE_URI)
-    })
 
     it('has correct base URI', async () => {
       expect(await academicCreds.baseURI()).to.equal(BASE_URI)
@@ -35,9 +42,37 @@ describe('AcademicCreds', () => {
   })
 
   describe('Register Schools', () => {
-    // only owner can register
-    // correct ID returned for new
-    // correct ID for existing
+    let transaction, result
+
+    describe('Success', async () => {
+
+      beforeEach(async () => {
+        transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
+        result = await transaction.wait()
+      })
+
+      it('adds new school to mapping', async () => {
+        expect(await academicCreds.registeredSchools(school2.address)).to.equal(school2Name)
+      })
+
+      it('correctly identifies a registered school', async () => {
+        expect(await academicCreds.isSchool(school2.address)).to.be.true
+      })
+
+    })
+
+    describe('Failure', async () => {
+
+      it('prevents non-owner from registering a school', async () => {
+        await expect(
+          academicCreds.connect(student1).registerSchool(school1.address, school1Name)).to.be.reverted
+      })
+
+      it('correctly identifies an un-registered address', async () => {
+        expect(await academicCreds.isSchool(school2.address)).to.be.false
+      })
+
+    })
 
   })
 
