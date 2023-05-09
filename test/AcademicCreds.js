@@ -59,6 +59,11 @@ describe('AcademicCreds', () => {
         expect(await academicCreds.isSchool(school2.address)).to.be.true
       })
 
+      it('emits RegisterSchool event', async () => {
+        await expect(transaction).to.emit(academicCreds, 'RegisterSchool')
+          .withArgs(school2.address, school2Name)
+      })
+
     })
 
     describe('Failure', async () => {
@@ -66,6 +71,11 @@ describe('AcademicCreds', () => {
       it('prevents non-owner from registering a school', async () => {
         await expect(
           academicCreds.connect(student1).registerSchool(school1.address, school1Name)).to.be.reverted
+      })
+
+      it('prevents an empty school name', async () => {
+        await expect(
+          academicCreds.connect(deployer).registerSchool(school1.address, "")).to.be.reverted
       })
 
       it('correctly identifies an un-registered address', async () => {

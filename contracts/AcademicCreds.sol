@@ -68,8 +68,8 @@ contract AcademicCreds is ERC1155, Ownable {
         // must provide a name
         require(!compareStrs(_schoolName, ""), "Must provide a school name.");
 
-        // must not be account 0 -- fix this!
-        //require(_account != "0x0", "Invalid account provided.");
+        // must not be account 0
+        require(_account != address(0), "Invalid account provided.");
 
         // add school acount/name to the mapping
         registeredSchools[_account] = _schoolName;
