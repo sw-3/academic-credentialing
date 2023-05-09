@@ -96,17 +96,39 @@ describe('AcademicCreds', () => {
       beforeEach(async () => {
         transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
         result = await transaction.wait()
-        transaction =
-          await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
-        result = await transaction.wait()
       })
 
       it('adds student to registeredStudents mapping', async () => {
+        transaction =
+          await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
+        result = await transaction.wait()
+
         expect(await academicCreds.registeredStudents(student1.address)).to.equal(1)
       })
 
+      it('mints transcript & diploma to account', async () => {
+        // check balances before 
+        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(0)
+        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
 
-    // transcript token owned by student
+        // mint transcript
+        transaction =
+          await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
+        result = await transaction.wait()
+
+        // check balances
+        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(1)
+        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
+
+        // mint diploma
+        transaction =
+          await academicCreds.connect(school2).issueCredential(student1.address, DIPLOMA, '0x');
+        result = await transaction.wait()
+
+        // check balances
+        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(1)
+        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(1)
+      })
     
     })
 
@@ -117,9 +139,6 @@ describe('AcademicCreds', () => {
           academicCreds.connect(school2).issueCredential(student2.address, TRANSCRIPT, '0x')).to.be.reverted
       })
 
-
-
-        // only registered school can mint
     })
 
   })

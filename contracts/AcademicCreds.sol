@@ -86,7 +86,7 @@ contract AcademicCreds is ERC1155, Ownable {
     // function issueCredential
     // ------------------------------------------------------------------------
     // Allows a school to issue a transcript or diploma to a student.
-    // (Utilizes the ERC1155 token _mint() function.)
+    // (Utilizes the openZeppelin ERC1155 token _mint() function.)
     // ------------------------------------------------------------------------
     function issueCredential
         (
@@ -110,7 +110,7 @@ contract AcademicCreds is ERC1155, Ownable {
         _mint(_account, _id, amount, _data);
     }
 
-    // I don't *think* we need mintBatch .. a school is issuing 1 credential at a time?
+    // No need for mintBatch ... a school issues 1 credential at a time
     //
     // function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
     //     public
