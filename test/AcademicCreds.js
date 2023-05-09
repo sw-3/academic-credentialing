@@ -49,6 +49,7 @@ describe('AcademicCreds', () => {
     describe('Success', async () => {
 
       beforeEach(async () => {
+        // register a school
         transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
         result = await transaction.wait()
       })
@@ -94,11 +95,13 @@ describe('AcademicCreds', () => {
     describe('Success', async () => {
 
       beforeEach(async () => {
+        // register a school
         transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
         result = await transaction.wait()
       })
 
       it('adds student to registeredStudents mapping', async () => {
+        // issue a transcript
         transaction =
           await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
         result = await transaction.wait()
@@ -111,7 +114,7 @@ describe('AcademicCreds', () => {
         expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(0)
         expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
 
-        // mint transcript
+        // issue a transcript
         transaction =
           await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
         result = await transaction.wait()
@@ -120,7 +123,7 @@ describe('AcademicCreds', () => {
         expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(1)
         expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
 
-        // mint diploma
+        // issue a diploma
         transaction =
           await academicCreds.connect(school2).issueCredential(student1.address, DIPLOMA, '0x');
         result = await transaction.wait()
@@ -138,7 +141,35 @@ describe('AcademicCreds', () => {
         await expect(
           academicCreds.connect(school2).issueCredential(student2.address, TRANSCRIPT, '0x')).to.be.reverted
       })
+    })
+  })
 
+  describe('Soulbound Properties', () => {
+    let transaction, result
+
+    beforeEach(async () => {
+      // register a school
+      transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
+      result = await transaction.wait()
+      // issue a transcript
+      transaction =
+        await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
+      result = await transaction.wait()
+    })
+
+    it('does not allow approvals', async () => {
+      // attempt to set approval for student 2
+      await expect(
+        academicCreds.connect(student1).setApprovalForAll(student2.address, true)).to.be.reverted
+    })
+
+    it('does not allow transfers', async () => {
+      // attempt to transfer to student 2
+      await expect(
+        academicCreds.connect(student1).safeTransferFrom(
+                  student1.address,
+                  student2.address,
+                  TRANSCRIPT, 1, '0x')).to.be.reverted
     })
 
   })

@@ -44,12 +44,12 @@ contract AcademicCreds is ERC1155, Ownable {
     }
 
     // function to compare 2 strings; if equal returns true
-    function compareStrs
+    function _compareStrs
         (
             string memory str1,
             string memory str2
         )
-        public pure returns (bool)
+        internal pure returns (bool)
     {
         if (bytes(str1).length != bytes(str2).length) {
             return false;
@@ -66,7 +66,7 @@ contract AcademicCreds is ERC1155, Ownable {
         public onlyOwner
     {
         // must provide a name
-        require(!compareStrs(_schoolName, ""), "Must provide a school name.");
+        require(!_compareStrs(_schoolName, ""), "Must provide a school name.");
 
         // must not be account 0
         require(_account != address(0), "Invalid account provided.");
@@ -80,7 +80,7 @@ contract AcademicCreds is ERC1155, Ownable {
 
     function isSchool(address _account) public view returns (bool)
     {
-        return (!compareStrs(registeredSchools[_account], ""));
+        return (!_compareStrs(registeredSchools[_account], ""));
     }
 
     // function issueCredential
@@ -128,28 +128,16 @@ contract AcademicCreds is ERC1155, Ownable {
     //
 
     function setApprovalForAll(address operator, bool approved)
-        public override
+        public pure override
     {
-        // might rewrite this to approve for VIEWING the tokens only??
-        // otherwise, should just fail with error
+        // NOTE: might rewrite this to approve for VIEWING the tokens only
 
-        // if operator != msg.sender
-        //      fail here ...
-        // else
-        //      it will fail in the openZeppelin parent
+        // 'Approval' will just fail with error in this contract
+        // Thus, isApprovedForAll can be called but will always return false.
 
+        require(operator == address(0), "Approvals not supported for academic credentials.");
     }
 
-    function isApprovedForAll(address account, address operator)
-        public view override
-        returns (bool)
-    {
-        // if we use approvals for VIEWING the tokens, this will return true
-
-        // if we don't use approvals at all, this should just return false
-
-        //return false;
-    }
 
     function safeTransferFrom
         (
@@ -159,15 +147,11 @@ contract AcademicCreds is ERC1155, Ownable {
             uint256 amount,
             bytes memory data
         )
-        public override
+        public pure override
     {
+        // Soulbound Tokens cannot be transferred
 
-        // Transfer functions should fail; 'token is not transferrable'
-        // if 'to' != '0x0' then
-        //      fail here ...
-        // else
-        //      it will fail in the openZeppelin parent
-
+        require(from == address(0), "Transfers not supported for academic credentials.");
     }
 
 
@@ -179,14 +163,11 @@ contract AcademicCreds is ERC1155, Ownable {
             uint256[] memory amounts,
             bytes memory data
         )
-        public override
+        public pure override
     {
-        // Transfer functions should fail; 'token is not transferrable'
-        // if 'to' != '0x0' then
-        //      fail here ...
-        // else
-        //      it will fail in the openZeppelin parent
+        // Soulbound Tokens cannot be transferred
 
+        require(from == address(0), "Transfers not supported for academic credentials.");
     }
 
 
@@ -202,6 +183,9 @@ contract AcademicCreds is ERC1155, Ownable {
     // Since our Soulbound version does not utilize Approvals in this way,
     // it is best to create our own burn functions that enforces only
     // burning one's own tokens.
+    //
+    // We will also want to burn a "specific" transcript or diploma,
+    // rather than an amount of them.
 
 
     function burn(address from, uint256 id, uint256 amount)
