@@ -132,6 +132,65 @@ describe('Diplomas', () => {
     })
   })
 
+  describe('Burning Diplomas', () => {
+    let transaction, result
+
+    describe('Success', async () => {
+
+      beforeEach(async () => {
+        // mint a transcript to student1
+        transaction =
+          await diplomas.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+
+        // mint another transcript to student1
+        transaction =
+          await diplomas.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+      })
+
+      it('burns the token', async () => {
+        // check token balance before
+        expect(await diplomas.balanceOf(student1.address)).to.equal(2)
+
+        // burn the first token issued
+        let tokenID = 0
+        transaction = await diplomas.connect(student1).burn(tokenID)
+        result = await transaction.wait()
+
+        // check token balance after
+        expect(await diplomas.balanceOf(student1.address)).to.equal(1)
+
+        // check the token owners - ownerOf should revert for the first
+        await expect(diplomas.ownerOf(tokenID)).to.be.reverted
+        tokenID = 1
+        // ownerOf should still return the student for the 2nd
+        expect(await diplomas.ownerOf(tokenID)).to.equal(student1.address)
+
+      })
+
+    })
+
+    describe('Failure', async () => {
+
+      it('prevents non- token owner from burning', async () => {
+        // mint a transcript to student1
+        transaction =
+          await diplomas.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+
+        // different account requests to burn
+        let tokenID = 0
+        await expect(diplomas.connect(student2).burn(tokenID)).to.be.reverted
+
+        // check balance is still 1
+        expect(await diplomas.balanceOf(student1.address)).to.equal(1)
+      })
+
+    })
+
+  })
+
   describe('Soulbound Properties', () => {
     let transaction, result
 /*

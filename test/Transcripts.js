@@ -117,6 +117,65 @@ describe('Transcripts', () => {
     })
   })
 
+  describe('Burning Transcripts', () => {
+    let transaction, result
+
+    describe('Success', async () => {
+
+      beforeEach(async () => {
+        // mint a transcript to student1
+        transaction =
+          await transcripts.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+
+        // mint another transcript to student1
+        transaction =
+          await transcripts.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+      })
+
+      it('burns the token', async () => {
+        // check token balance before
+        expect(await transcripts.balanceOf(student1.address)).to.equal(2)
+
+        // burn the first token issued
+        let tokenID = 0
+        transaction = await transcripts.connect(student1).burn(tokenID)
+        result = await transaction.wait()
+
+        // check token balance after
+        expect(await transcripts.balanceOf(student1.address)).to.equal(1)
+
+        // check the token owners - ownerOf should revert for the first
+        await expect(transcripts.ownerOf(tokenID)).to.be.reverted
+        tokenID = 1
+        // ownerOf should still return the student for the 2nd
+        expect(await transcripts.ownerOf(tokenID)).to.equal(student1.address)
+
+      })
+
+    })
+
+    describe('Failure', async () => {
+
+      it('prevents non- token owner from burning', async () => {
+        // mint a transcript to student1
+        transaction =
+          await transcripts.safeMint(student1.address, BASE_URI)
+        result = await transaction.wait()
+
+        // different account requests to burn
+        let tokenID = 0
+        await expect(transcripts.connect(student2).burn(tokenID)).to.be.reverted
+
+        // check balance is still 1
+        expect(await transcripts.balanceOf(student1.address)).to.equal(1)
+      })
+
+    })
+
+  })
+
   describe('Soulbound Properties', () => {
     let transaction, result
 /*
