@@ -44,12 +44,10 @@ describe('Credential', () => {
     diplomaCred.setAcademicCredsAddress(academicCreds.address)
 
     // register school with controller contract
-        transaction = 
+        transaction =
           await academicCreds.connect(deployer).registerSchool(
             school1.address, school1Name)
         result = await transaction.wait()
-
-
   })
 
   describe('Deployment', () => {
@@ -108,42 +106,44 @@ describe('Credential', () => {
     })
   })
 
-/*
-
   describe('Burning Credentials', () => {
     let transaction, result
+
+    beforeEach(async () => {
+      // issue a transcript to student1 via school1
+      transaction =
+        await academicCreds.connect(school1).issueCredential(
+          student1.address, transcriptCred.address, BASE_URI);
+      result = await transaction.wait()
+    })
 
     describe('Success', async () => {
 
       beforeEach(async () => {
-        // mint a transcript to student1
+        // issue another transcript to student1
         transaction =
-          await credential.connect(student1).safeMint(student1.address, BASE_URI)
-        result = await transaction.wait()
-
-        // mint another transcript to student1
-        transaction =
-          await credential.connect(student1).safeMint(student1.address, BASE_URI)
+          await academicCreds.connect(school1).issueCredential(
+            student1.address, transcriptCred.address, BASE_URI);
         result = await transaction.wait()
       })
 
       it('burns the token', async () => {
         // check token balance before
-        expect(await credential.balanceOf(student1.address)).to.equal(2)
+        expect(await transcriptCred.balanceOf(student1.address)).to.equal(2)
 
         // burn the first token issued
         let tokenID = 0
-        transaction = await credential.connect(student1).burn(tokenID)
+        transaction = await transcriptCred.connect(student1).burn(tokenID)
         result = await transaction.wait()
 
         // check token balance after
-        expect(await credential.balanceOf(student1.address)).to.equal(1)
+        expect(await transcriptCred.balanceOf(student1.address)).to.equal(1)
 
         // check the token owners - ownerOf should revert for the first
-        await expect(credential.ownerOf(tokenID)).to.be.reverted
+        await expect(transcriptCred.ownerOf(tokenID)).to.be.reverted
         tokenID = 1
         // ownerOf should still return the student for the 2nd
-        expect(await credential.ownerOf(tokenID)).to.equal(student1.address)
+        expect(await transcriptCred.ownerOf(tokenID)).to.equal(student1.address)
 
       })
 
@@ -152,49 +152,64 @@ describe('Credential', () => {
     describe('Failure', async () => {
 
       it('prevents non- token owner from burning', async () => {
-        // mint a transcript to student1
-        transaction =
-          await credential.connect(student1).safeMint(student1.address, BASE_URI)
-        result = await transaction.wait()
-
-        // different account requests to burn
+        // different accounts request to burn
         let tokenID = 0
-        await expect(credential.connect(student2).burn(tokenID)).to.be.reverted
+        await expect(transcriptCred.connect(student2).burn(tokenID)).to.be.reverted
+        await expect(transcriptCred.burn(tokenID)).to.be.reverted
 
         // check balance is still 1
-        expect(await credential.balanceOf(student1.address)).to.equal(1)
+        expect(await transcriptCred.balanceOf(student1.address)).to.equal(1)
       })
 
     })
   })
-*/
+
   describe('Soulbound Properties', () => {
     let transaction, result
-/*
+
     beforeEach(async () => {
-      // register a school
-      transaction = await academicCreds.connect(deployer).registerSchool(school2.address, school2Name)
-      result = await transaction.wait()
-      // issue a transcript
+      // issue a transcript to student1 via school1
       transaction =
-        await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
+        await academicCreds.connect(school1).issueCredential(
+          student1.address, transcriptCred.address, BASE_URI);
       result = await transaction.wait()
     })
 
     it('does not allow approvals', async () => {
+      let tokenID = 0
+
       // attempt to set approval for student 2
       await expect(
-        academicCreds.connect(student1).setApprovalForAll(student2.address, true)).to.be.reverted
+        transcriptCred.connect(student1).approve(student2.address, tokenID)).to.be.reverted
+      await expect(
+        transcriptCred.connect(student1).setApprovalForAll(student2.address, true)).to.be.reverted
     })
 
     it('does not allow transfers', async () => {
+      let tokenID = 0
+
       // attempt to transfer to student 2
       await expect(
-        academicCreds.connect(student1).safeTransferFrom(
+        transcriptCred.connect(student1)['safeTransferFrom(address,address,uint256,bytes)'](
                   student1.address,
                   student2.address,
-                  TRANSCRIPT, 1, '0x')).to.be.reverted
+                  tokenID, '0x')).to.be.reverted
+
+      await expect(
+        transcriptCred.connect(student1)['safeTransferFrom(address,address,uint256)'](
+                  student1.address,
+                  student2.address,
+                  tokenID)).to.be.reverted
+
+      await expect(
+        transcriptCred.connect(student1).transferFrom(
+                    student1.address,
+                    student2.address,
+                    tokenID)).to.be.reverted
+
+      // owner should still equal student1
+      expect(await transcriptCred.ownerOf(tokenID)).to.equal(student1.address)
+
     })
-*/
   })
 })

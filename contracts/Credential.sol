@@ -75,14 +75,14 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         return super.supportsInterface(interfaceId);
     }
 
-    // The following override standard functions to implement 'souldbound' tokens
-    // --------------------------------------------------------------------------
+    // The following overrides implement 'souldbound' tokens
+    // ------------------------------------------------------------------------
 
     function approve(address _approved, uint256 _tokenId)
         public override(ERC721, IERC721)
     {
         // not allowing approvals for soulbound transcript tokens
-        require(_approved == address(0), 'Cannot approve transcript token.');
+        require(_approved == address(0), 'Cannot approve transfers of Credential tokens.');
 
         // if _approved is 0 address, reaffirms that no address is approved
         super.approve(_approved, _tokenId);
@@ -92,7 +92,7 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         public override(ERC721, IERC721)
     {
         // do not allow approvals for soulbound transcript tokens
-        require(_approved == false, 'Cannot approve transcript tokens.');
+        require(_approved == false, 'Cannot approve transfers of Credential tokens.');
 
         // if false then reaffirm revoking all approval
         super.setApprovalForAll(_operator, _approved);
@@ -108,7 +108,7 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         public override(ERC721, IERC721)
     {
         // do not allow tranfers for soulbound transcript tokens
-        require(_to == address(0), 'Cannot transfer transcript token.');
+        require(_to == address(0), 'Cannot transfer Credential tokens.');
 
         // if _to is the 0 address, this will also throw
         super.safeTransferFrom(_from, _to, _tokenId, data);
@@ -123,7 +123,7 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         public override(ERC721, IERC721)
     {
         // do not allow tranfers for soulbound transcript tokens
-        require(_to == address(0), 'Cannot transfer transcript token.');
+        require(_to == address(0), 'Cannot transfer Credential tokens.');
 
         // if _to is the 0 address, this will also throw
         super.safeTransferFrom(_from, _to, _tokenId);
@@ -138,7 +138,7 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
         public override(ERC721, IERC721)
     {
         // do not allow tranfers for soulbound transcript tokens
-        require(_to == address(0), 'Cannot transfer transcript token.');
+        require(_to == address(0), 'Cannot transfer Credential tokens.');
 
         // if _to is the 0 address, this will also throw
         super.safeTransferFrom(_from, _to, _tokenId);
