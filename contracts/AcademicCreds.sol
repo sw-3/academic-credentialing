@@ -4,7 +4,12 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+import "./Credential.sol";
+
 contract AcademicCreds is Ownable {
+
+    Credential public transcriptCred;
+    Credential public diplomaCred;
 
     // set up incremental unique ID assignment for Schools and Students
     // usage:
@@ -15,37 +20,33 @@ contract AcademicCreds is Ownable {
     Counters.Counter private _schoolIdCounter;
     Counters.Counter private _studentIdCounter;
 
+    string public baseURI;  // not sure this is needed?
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  EVERYTHING BELOW HERE NEEDS TO BE REWORKED!!!
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-
-    // Manage 2 different NFT tokens representing types of academic credentials
-    uint256 public constant TRANSCRIPT = 0;
-    uint256 public constant DIPLOMA = 1;
-
-    uint256 public NEXT_SCHOOL_ID = 1;
-    uint256 public NEXT_STUDENT_ID = 1;
-
-    string public baseURI;
-
-    // Every school registered with the system will get an ID > 0
+    // Every school registered with the system will go in the mapping
     mapping(address => string) public registeredSchools;
-    // Every student who receives a credential will get an ID > 0
+    // Every student who receives a credential will get an ID in a mapping
     mapping(address => uint256) public registeredStudents;
 
     event RegisterSchool(address account, string schoolName);
 
-    constructor() {
+    constructor(Credential _transcriptCred, Credential _diplomaCred) {
 
         // We may need to use the IPFS node URI here as a base URI !!??
         // baseURI = _baseURI;
 
-        // Code goes here...  nothing else needed to initialize on deploy??
+        // NOTE: the counters start at 0; need to increment so ID starts at 1
+        _schoolIdCounter.increment();
+        _studentIdCounter.increment();
 
+        // connect to credential tokens
+        transcriptCred = _transcriptCred;
+        diplomaCred = _diplomaCred;
+    }
+
+    // modifier to enforce who can issue credentials
+    modifier onlySchool() {
+        require(isSchool(msg.sender), "Must be a registered school.");
+        _;
     }
 
     // function to compare 2 strings; if equal returns true
@@ -90,28 +91,24 @@ contract AcademicCreds is Ownable {
 
     // function issueCredential
     // ------------------------------------------------------------------------
-    // Allows a school to issue a transcript or diploma to a student.
-    // (Utilizes the openZeppelin ERC1155 token _mint() function.)
+    // Issue a transcript or diploma to a student.
+    // Calls the credential token safeMint() function.
     // ------------------------------------------------------------------------
     function issueCredential
         (
             address _account,
-            uint256 _id,
-            bytes memory _data
+            Credential _credential,
+            string memory _uri
         )
-        public
+        public onlySchool
     {
-        // ensure minter is a registered school
-        require(isSchool(msg.sender), "Must be a registered school.");
-
-        uint256 amount = 1;  // issues 1 credential at a time
-
         // add receiving account to the registered students
-        if (registeredStudents[_account] == 0) {
-            registeredStudents[_account] = NEXT_STUDENT_ID;
-            NEXT_STUDENT_ID++;
-        }
+        // SDW NOTE: still need to figure out where to register students
+        //if (registeredStudents[_account] == 0) {
+        //    registeredStudents[_account] = NEXT_STUDENT_ID;
+        //    NEXT_STUDENT_ID++;
+        //}
 
-        //_mint(_account, _id, amount, _data);
+        _credential.safeMint(_account, _uri);
     }
 }

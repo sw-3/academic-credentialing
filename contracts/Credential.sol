@@ -13,18 +13,15 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
 
     Counters.Counter private _tokenIdCounter;
 
-    address internal academicCredsAddress;
+    address public academicCredsAddress;
 
     constructor
         (
             string memory _name,
-            string memory _symbol,
-            address _academicCredsAddress
+            string memory _symbol
         )
         ERC721(_name, _symbol)
-    {
-        academicCredsAddress = _academicCredsAddress;
-    }
+    {}
 
     // modifier to enforce who can mint
     modifier onlyAcademicCreds() {
@@ -33,6 +30,11 @@ contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnabl
             "Not authorized to mint."
         );
         _;
+    }
+
+    // function to allow the deployer to set the controlling contract address
+    function setAcademicCredsAddress(address _address) public onlyOwner {
+        academicCredsAddress = _address;
     }
 
     function safeMint(address to, string memory uri) public onlyAcademicCreds {

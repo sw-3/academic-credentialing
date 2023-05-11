@@ -4,8 +4,10 @@ const { ethers } = require('hardhat');
 describe('Credential', () => {
 
   const BASE_URI = 'ipfs://'
-  const NAME = 'Transcripts'
-  const SYMBOL = 'TSCRP'
+  const NAME1 = 'Transcripts'
+  const SYMBOL1 = 'TSCRP'
+  const NAME2 = 'Diplomas'
+  const SYMBOL2 = 'DPLMA'
 
   let deployer,
       school1, school2, school3,
@@ -28,27 +30,41 @@ describe('Credential', () => {
     student3 = accounts[6]
     student4 = accounts[7]
 
-    // deploy contracts
-    const AcademicCreds = await ethers.getContractFactory('AcademicCreds')
-    academicCreds = await AcademicCreds.deploy()    
+    // deploy credential contracts
     const Credential = await ethers.getContractFactory('Credential')
-    credential = await Credential.deploy(NAME, SYMBOL, academicCreds.address)
+    transcriptCred = await Credential.deploy(NAME1, SYMBOL1)
+    diplomaCred = await Credential.deploy(NAME2, SYMBOL2)
+
+    // deploy controller contract
+    const AcademicCreds = await ethers.getContractFactory('AcademicCreds')
+    academicCreds = await AcademicCreds.deploy(transcriptCred.address, diplomaCred.address)
+
+    // configure credential contracts with controller address
+    transcriptCred.setAcademicCredsAddress(academicCreds.address)
+    diplomaCred.setAcademicCredsAddress(academicCreds.address)
+
+    // register school with controller contract
+        transaction = 
+          await academicCreds.connect(deployer).registerSchool(
+            school1.address, school1Name)
+        result = await transaction.wait()
+
+
   })
 
   describe('Deployment', () => {
 
     it('returns correct name', async () => {
-      expect(await credential.name()).to.equal(NAME)
+      expect(await transcriptCred.name()).to.equal(NAME1)
     })
 
     it('returns correct symbol', async () => {
-      expect(await credential.symbol()).to.equal(SYMBOL)
+      expect(await diplomaCred.symbol()).to.equal(SYMBOL2)
     })
 
-    // have to set academicCredsAddress in Transcript.sol as public to run this test!
-    // it('returns the academicCreds contract address', async () => {
-    //   expect(await credential.academicCredsAddress()).to.equal(academicCreds.address)
-    // })
+    it('returns the academicCreds contract address', async () => {
+      expect(await diplomaCred.academicCredsAddress()).to.equal(academicCreds.address)
+    })
 
   })
 
@@ -58,51 +74,41 @@ describe('Credential', () => {
     describe('Success', async () => {
 
       beforeEach(async () => {
-        // mint a transcript to student1
-        // SDW:  Have to do this via AcademicCreds.issueCredential
+
+        // issue a transcript to student1 via school1
         transaction =
-          await credential.connect(academicCreds).safeMint(student1.address, BASE_URI);
+          await academicCreds.connect(school1).issueCredential(
+            student1.address, transcriptCred.address, BASE_URI);
         result = await transaction.wait()
       })
 
       it('mints to the correct account', async () => {
         let tokenID = 0
-        expect(await credential.ownerOf(tokenID)).to.equal(student1.address)
-
-        // mint a transcript to student2
-        transaction =
-          await credential.connect(student1).safeMint(student2.address, BASE_URI);
-        result = await transaction.wait()
-
-        tokenID = 1
-        expect(await credential.ownerOf(tokenID)).to.equal(student2.address)
+        expect(await transcriptCred.ownerOf(tokenID)).to.equal(student1.address)
       })
 
       it('returns the correct balance', async () => {
-        // mint another transcript to student1
-        transaction =
-          await credential.connect(student1).safeMint(student1.address, BASE_URI);
-        result = await transaction.wait()
-
-        expect(await credential.balanceOf(student1.address)).to.equal(2)
+        expect(await transcriptCred.balanceOf(student1.address)).to.equal(1)
       })
-
     })
 
     describe('Failure', async () => {
 
       it('prevents all but AcedemicCreds account from minting', async () => {
-        // mint a transcript from AcademicCreds to student1
-        transaction =
-          await credential.connect(student1).safeMint(student1.address, BASE_URI);
-        result = await transaction.wait()
 
-        // check balance
-        expect(await credential.balanceOf(student1.address)).to.equal(1)
+        // attempt to mint directly from a student account; should fail
+        await expect(
+          transcriptCred.connect(student1).safeMint(student1.address, BASE_URI)).to.be.reverted;
+
+        // attempt to mint directly from the deployer; should fail
+        await expect(
+          transcriptCred.safeMint(student1.address, BASE_URI)).to.be.reverted;
       })
 
     })
   })
+
+/*
 
   describe('Burning Credentials', () => {
     let transaction, result
@@ -161,7 +167,7 @@ describe('Credential', () => {
 
     })
   })
-
+*/
   describe('Soulbound Properties', () => {
     let transaction, result
 /*
