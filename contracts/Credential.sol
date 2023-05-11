@@ -8,14 +8,21 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Transcripts is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
+contract Credential is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
     address internal academicCredsAddress;
 
-    constructor(address _academicCredsAddress) ERC721("Transcripts", "TSCRP") {
+    constructor
+        (
+            string memory _name,
+            string memory _symbol,
+            address _academicCredsAddress
+        )
+        ERC721(_name, _symbol)
+    {
         academicCredsAddress = _academicCredsAddress;
     }
 
