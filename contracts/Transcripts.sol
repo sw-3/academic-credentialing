@@ -13,14 +13,22 @@ contract Transcripts is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnab
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("Transcripts", "TSCRP") {}
+    address internal academicCredsAddress;
 
-    // SDW NOTE:  safeMint needs to be 'onlySchool' instead of 'onlyOwner'
-    //      Can accomplish by 
-    //      1) only allow the AcademicCreds contract address to call this
-    //          a) deploy this with the address as an arg to constructor
-    //      2) AcademicCreds only calls this if a school requests it
-    function safeMint(address to, string memory uri) public onlyOwner {
+    constructor(address _academicCredsAddress) ERC721("Transcripts", "TSCRP") {
+        academicCredsAddress = _academicCredsAddress;
+    }
+
+    // modifier to enforce who can mint
+    modifier onlyAcademicCreds() {
+        require(
+            msg.sender == academicCredsAddress,
+            "Not authorized to mint."
+        );
+        _;
+    }
+
+    function safeMint(address to, string memory uri) public onlyAcademicCreds {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);

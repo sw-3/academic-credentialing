@@ -28,10 +28,11 @@ describe('Transcripts', () => {
     student3 = accounts[6]
     student4 = accounts[7]
 
-    // deploy contract
+    // deploy contracts
+    const AcademicCreds = await ethers.getContractFactory('AcademicCreds')
+    academicCreds = await AcademicCreds.deploy()    
     const Transcripts = await ethers.getContractFactory('Transcripts')
-    transcripts = await Transcripts.deploy()
-
+    transcripts = await Transcripts.deploy(academicCreds.address)
   })
 
   describe('Deployment', () => {
@@ -44,6 +45,11 @@ describe('Transcripts', () => {
       expect(await transcripts.symbol()).to.equal(SYMBOL)
     })
 
+    // have to set academicCredsAddress in Transcript.sol as public to run this test!
+    // it('returns the academicCreds contract address', async () => {
+    //   expect(await transcripts.academicCredsAddress()).to.equal(academicCreds.address)
+    // })
+
   })
 
   describe('Minting Transcripts', () => {
@@ -53,8 +59,9 @@ describe('Transcripts', () => {
 
       beforeEach(async () => {
         // mint a transcript to student1
+        // SDW:  Have to do this via AcademicCreds.issueCredential
         transaction =
-          await transcripts.safeMint(student1.address, BASE_URI);
+          await transcripts.connect(academicCreds).safeMint(student1.address, BASE_URI);
         result = await transaction.wait()
       })
 
@@ -64,7 +71,7 @@ describe('Transcripts', () => {
 
         // mint a transcript to student2
         transaction =
-          await transcripts.safeMint(student2.address, BASE_URI);
+          await transcripts.connect(student1).safeMint(student2.address, BASE_URI);
         result = await transaction.wait()
 
         tokenID = 1
@@ -74,46 +81,26 @@ describe('Transcripts', () => {
       it('returns the correct balance', async () => {
         // mint another transcript to student1
         transaction =
-          await transcripts.safeMint(student1.address, BASE_URI);
+          await transcripts.connect(student1).safeMint(student1.address, BASE_URI);
         result = await transaction.wait()
 
         expect(await transcripts.balanceOf(student1.address)).to.equal(2)
       })
 
-/*
-      it('mints transcript & diploma to account', async () => {
-        // check balances before 
-        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(0)
-        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
-
-        // issue a transcript
-        transaction =
-          await academicCreds.connect(school2).issueCredential(student1.address, TRANSCRIPT, '0x');
-        result = await transaction.wait()
-
-        // check balances
-        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(1)
-        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(0)
-
-        // issue a diploma
-        transaction =
-          await academicCreds.connect(school2).issueCredential(student1.address, DIPLOMA, '0x');
-        result = await transaction.wait()
-
-        // check balances
-        expect(await academicCreds.balanceOf(student1.address, TRANSCRIPT)).to.equal(1)
-        expect(await academicCreds.balanceOf(student1.address, DIPLOMA)).to.equal(1)
-      })
-*/    
     })
 
     describe('Failure', async () => {
-/*
-      it('prevents non-registered school from minting', async () => {
-        await expect(
-          academicCreds.connect(school2).issueCredential(student2.address, TRANSCRIPT, '0x')).to.be.reverted
+
+      it('prevents all but AcedemicCreds account from minting', async () => {
+        // mint a transcript from AcademicCreds to student1
+        transaction =
+          await transcripts.connect(student1).safeMint(student1.address, BASE_URI);
+        result = await transaction.wait()
+
+        // check balance
+        expect(await transcripts.balanceOf(student1.address)).to.equal(1)
       })
-*/
+
     })
   })
 
@@ -125,12 +112,12 @@ describe('Transcripts', () => {
       beforeEach(async () => {
         // mint a transcript to student1
         transaction =
-          await transcripts.safeMint(student1.address, BASE_URI)
+          await transcripts.connect(student1).safeMint(student1.address, BASE_URI)
         result = await transaction.wait()
 
         // mint another transcript to student1
         transaction =
-          await transcripts.safeMint(student1.address, BASE_URI)
+          await transcripts.connect(student1).safeMint(student1.address, BASE_URI)
         result = await transaction.wait()
       })
 
@@ -161,7 +148,7 @@ describe('Transcripts', () => {
       it('prevents non- token owner from burning', async () => {
         // mint a transcript to student1
         transaction =
-          await transcripts.safeMint(student1.address, BASE_URI)
+          await transcripts.connect(student1).safeMint(student1.address, BASE_URI)
         result = await transaction.wait()
 
         // different account requests to burn
@@ -173,7 +160,6 @@ describe('Transcripts', () => {
       })
 
     })
-
   })
 
   describe('Soulbound Properties', () => {
