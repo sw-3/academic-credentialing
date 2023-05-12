@@ -4,18 +4,14 @@ const { ethers } = require('hardhat');
 describe('Credential', () => {
 
   const BASE_URI = 'ipfs://'
-  const NAME1 = 'Transcripts'
+  const NAME1 = 'Transcript'
   const SYMBOL1 = 'TSCRP'
-  const NAME2 = 'Diplomas'
+  const NAME2 = 'Diploma'
   const SYMBOL2 = 'DPLMA'
 
-  let deployer,
-      school1, school2, school3,
-      student1, student2, student3, student4
+  let deployer, school1, student1, student2
 
   const school1Name = "Harvard University"
-  const school2Name = "Montana State University"
-  const school3Name = "Oral Roberts University"
 
   beforeEach(async () => {
 
@@ -23,12 +19,8 @@ describe('Credential', () => {
     let accounts = await ethers.getSigners()
     deployer = accounts[0]
     school1 = accounts[1]
-    school2 = accounts[2]
-    school3 = accounts[3]
-    student1 = accounts[4]
-    student2 = accounts[5]
-    student3 = accounts[6]
-    student4 = accounts[7]
+    student1 = accounts[2]
+    student2 = accounts[3]
 
     // deploy credential contracts
     const Credential = await ethers.getContractFactory('Credential')
@@ -44,10 +36,10 @@ describe('Credential', () => {
     diplomaCred.setAcademicCredsAddress(academicCreds.address)
 
     // register school with controller contract
-        transaction =
-          await academicCreds.connect(deployer).registerSchool(
-            school1.address, school1Name)
-        result = await transaction.wait()
+    transaction =
+      await academicCreds.connect(deployer).registerSchool(
+        school1.address, school1Name)
+    result = await transaction.wait()
   })
 
   describe('Deployment', () => {

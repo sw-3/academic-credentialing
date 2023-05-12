@@ -1,43 +1,48 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
+// ----------------------------------------------------------------------------
+// AcademicCreds.sol
+//
+// A custom contract to manage the issuing of Academic Credentials
+//
+// Two types of credentials are implemented - transcript and diploma. Each is
+// represented by a 'soulbound' NFT which can be issued to a student account.
+// ----------------------------------------------------------------------------
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+// import Credential contract - a soulbound version of ERC721
 import "./Credential.sol";
 
 contract AcademicCreds is Ownable {
 
+    // This contract manages 2 types of Credential: transcript & diploma
     Credential public transcriptCred;
     Credential public diplomaCred;
 
-    // set up incremental unique ID assignment for Schools and Students
-    // usage:
-    //      uint256 schoolID = _schoolIdCounter.current();
-    //      _schoolIdCounter.increment();
-    // ------------------------------------------------------------------------
-    using Counters for Counters.Counter;
-    Counters.Counter private _schoolIdCounter;
-    Counters.Counter private _studentIdCounter;
-
-    string public baseURI;  // not sure this is needed?
-
     // Every school registered with the system will go in the mapping
     mapping(address => string) public registeredSchools;
-    // Every student who receives a credential will get an ID in a mapping
-    mapping(address => uint256) public registeredStudents;
 
+    // ----- NOT IMPLEMENTED FOR MVP FUNCTIONALITY ----------------------------
+    //
+    // Every student who receives a credential will get an ID in a mapping
+    //mapping(address => uint256) public registeredStudents;
+    //
+    // set up incremental unique ID assignment for Schools and Students
+    //using Counters for Counters.Counter;
+    //Counters.Counter private _schoolIdCounter;
+    //Counters.Counter private _studentIdCounter;
+    //
+    //string public baseURI;  // not sure this is needed?
+    // ------------------------------------------------------------------------
+
+    // event definitions
     event RegisterSchool(address account, string schoolName);
+    event IssueCredential(string credName, address account, string uri);
 
     constructor(Credential _transcriptCred, Credential _diplomaCred) {
-
-        // We may need to use the IPFS node URI here as a base URI !!??
-        // baseURI = _baseURI;
-
-        // NOTE: the counters start at 0; need to increment so ID starts at 1
-        _schoolIdCounter.increment();
-        _studentIdCounter.increment();
-
         // connect to credential tokens
         transcriptCred = _transcriptCred;
         diplomaCred = _diplomaCred;
@@ -102,13 +107,10 @@ contract AcademicCreds is Ownable {
         )
         public onlySchool
     {
-        // add receiving account to the registered students
-        // SDW NOTE: still need to figure out where to register students
-        //if (registeredStudents[_account] == 0) {
-        //    registeredStudents[_account] = NEXT_STUDENT_ID;
-        //    NEXT_STUDENT_ID++;
-        //}
+        string memory credName = _credential.name();
 
         _credential.safeMint(_account, _uri);
+
+        emit IssueCredential(credName, _account, _uri);
     }
 }
