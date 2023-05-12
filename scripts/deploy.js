@@ -7,21 +7,37 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  console.log('\n\n\nDeploying Academic Credentials contracts...\n')
+  // get contracts
+  const Credential = await hre.ethers.getContractFactory('Credential')
+  const AcademicCreds = await hre.ethers.getContractFactory('AcademicCreds')
 
-  const lockedAmount = hre.ethers.utils.parseEther("0.001");
+  // deploy credential contracts
+  const transcriptCred = await Credential.deploy('Transcript', 'TSCRP')
+  await transcriptCred.deployed()
+  console.log(`Transcript NFT deployed to:   ${transcriptCred.address}\n`)
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const diplomaCred = await Credential.deploy('Diploma', 'DPLMA')
+  await diplomaCred.deployed()
+  console.log(`Diploma NFT deployed to:      ${diplomaCred.address}\n`)
 
-  await lock.deployed();
+  // deploy AcademicCreds
+  const academicCreds = await AcademicCreds.deploy(transcriptCred.address, diplomaCred.address)
+  await academicCreds.deployed()
+  console.log(`Acedemic Creds deployed to:   ${academicCreds.address}\n`)
 
-  console.log(
-    `Lock with ${ethers.utils.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  // configure credential contracts with academicCreds address
+  console.log('\n-----\n')
+  console.log('Configuring credentials contracts...\n')
+  let transaction
+  transaction = await transcriptCred.setAcademicCredsAddress(academicCreds.address)
+  await transaction.wait()
+  console.log(`Transcript acedemicCreds addr set:  ${await transcriptCred.academicCredsAddress()}\n`)
+
+  transaction = await diplomaCred.setAcademicCredsAddress(academicCreds.address)
+  await transaction.wait()
+  console.log(`Diploma acedemicCreds addr set:     ${await diplomaCred.academicCredsAddress()}\n`)
+  console.log('Done.\n')
 }
 
 // We recommend this pattern to be able to use async/await everywhere
