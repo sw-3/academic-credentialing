@@ -11,7 +11,9 @@ import { ethers } from 'ethers'
 import {
   loadProvider,
   loadNetwork,
-  loadAccount
+  loadAccount,
+  loadCredentials,
+  loadAcademicCreds
 } from '../store/interactions'
 
 function App() {
@@ -25,9 +27,19 @@ function App() {
     // fetch chainId
     const chainId = await loadNetwork(provider, dispatch)
 
-    // fetch accounts
-    await loadAccount(dispatch)
+    // reload page when network changes
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload()
+    })
 
+    // fetch current account from Metamask when changed
+    window.ethereum.on('accountsChanged', async () => {
+      await loadAccount(dispatch)
+    })
+
+    // initiate contracts
+    await loadCredentials(provider, chainId, dispatch)
+    await loadAcademicCreds(provider, chainId, dispatch)
   }
 
   useEffect(() => {

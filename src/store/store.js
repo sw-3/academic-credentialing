@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import provider from './reducers/provider'
+import credentials from './reducers/credentials'
+import academicCreds from './reducers/academicCreds'
 
 export const store = configureStore({
   reducer: {
-    provider
+    provider,
+    credentials,
+    academicCreds
   },
   middleware: getDefaultMiddleware => 
     getDefaultMiddleware({

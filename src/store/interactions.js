@@ -4,7 +4,20 @@ import {
   setProvider,
   setNetwork,
   setAccount
- } from './reducers/provider'
+} from './reducers/provider'
+
+import {
+  setContracts,
+  setSymbols
+} from './reducers/credentials'
+
+import {
+  setContract
+} from './reducers/academicCreds'
+
+import CREDENTIAL_ABI from '../abis/Credential.json'
+import ACADEMIC_CREDS_ABI from '../abis/AcademicCreds.json'
+import config from '../config.json'
 
 export const loadProvider = (dispatch) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -26,4 +39,36 @@ export const loadAccount = async (dispatch) => {
   dispatch(setAccount(account))
 
   return account
+}
+
+// ----------------------------------------------------------------------------
+// Load Contracts
+// ----------------------------------------------------------------------------
+export const loadCredentials = async (provider, chainId, dispatch) => {
+  const transcriptCred = new ethers.Contract
+                        (
+                          config[chainId].transcriptCred.address,
+                          CREDENTIAL_ABI,
+                          provider
+                        )
+  const diplomaCred = new ethers.Contract
+                        (
+                          config[chainId].diplomaCred.address,
+                          CREDENTIAL_ABI,
+                          provider
+                        )
+
+  dispatch(setContracts([transcriptCred, diplomaCred]))
+  dispatch(setSymbols([await transcriptCred.symbol(), await diplomaCred.symbol()]))
+}
+
+export const loadAcademicCreds = async (provider, chainId, dispatch) => {
+  const academicCreds = new ethers.Contract
+                        (
+                          config[chainId].academicCreds.address,
+                          ACADEMIC_CREDS_ABI,
+                          provider
+                        )
+
+  dispatch(setContract(academicCreds))
 }
