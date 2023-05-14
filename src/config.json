@@ -9,5 +9,38 @@
     "academicCreds": {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
     }
+  },
+  "11155111": {
+    "transcriptCred": {
+      "address": ""
+    },
+    "diplomaCred": {
+      "address": ""
+    },
+    "academicCreds": {
+      "address": ""
+    }
+  },
+  "80001": {
+    "transcriptCred": {
+      "address": ""
+    },
+    "diplomaCred": {
+      "address": ""
+    },
+    "academicCreds": {
+      "address": ""
+    }
+  },
+  "5": {
+    "transcriptCred": {
+      "address": ""
+    },
+    "diplomaCred": {
+      "address": ""
+    },
+    "academicCreds": {
+      "address": ""
+    }
   }
 }
