@@ -6,7 +6,11 @@ import { ethers } from 'ethers'
 
 // components
 import Navigation from './Navigation'
-//import Loading from './Loading'
+import ViewTranscripts from './ViewTranscripts'
+import ViewDiplomas from './ViewDiplomas'
+import IssueTranscripts from './IssueTranscripts'
+import IssueDiplomas from './IssueDiplomas'
+import Tabs from './Tabs'
 
 import {
   loadProvider,
@@ -54,9 +58,14 @@ function App() {
 
         <hr />
 
-        <p>
-          Placeholder here...
-        </p>
+        <Tabs />
+
+        <Routes>
+          <Route exact path="/" element={<ViewTranscripts />} />
+          <Route path="/view-diplomas" element={<ViewDiplomas />} />
+          <Route path="/issue-transcripts" element={<IssueTranscripts />} />
+          <Route path="/issue-diplomas" element={<IssueDiplomas />} />
+        </Routes>
 
       </HashRouter>
     </Container>
