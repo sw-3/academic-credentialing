@@ -17,7 +17,8 @@ import {
   loadNetwork,
   loadAccount,
   loadCredentials,
-  loadAcademicCreds
+  loadAcademicCreds,
+  loadIsSchool
 } from '../store/interactions'
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
   const dispatch = useDispatch()
 
   const loadBlockchainData = async () => {
+    let account, academicCreds
+
     // initiate provider
     const provider = await loadProvider(dispatch)
 
@@ -38,12 +41,15 @@ function App() {
 
     // fetch current account from Metamask when changed
     window.ethereum.on('accountsChanged', async () => {
-      await loadAccount(dispatch)
+      account = await loadAccount(dispatch)
     })
 
     // initiate contracts
     await loadCredentials(provider, chainId, dispatch)
-    await loadAcademicCreds(provider, chainId, dispatch)
+    academicCreds = await loadAcademicCreds(provider, chainId, dispatch)
+
+    // set the isSchool indicator for the current account
+    await loadIsSchool(academicCreds, account, dispatch)
   }
 
   useEffect(() => {

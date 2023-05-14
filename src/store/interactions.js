@@ -12,7 +12,8 @@ import {
 } from './reducers/credentials'
 
 import {
-  setContract
+  setContract,
+  setIsSchool
 } from './reducers/academicCreds'
 
 import CREDENTIAL_ABI from '../abis/Credential.json'
@@ -69,6 +70,16 @@ export const loadAcademicCreds = async (provider, chainId, dispatch) => {
                           ACADEMIC_CREDS_ABI,
                           provider
                         )
-
   dispatch(setContract(academicCreds))
+
+  return academicCreds
+}
+
+// ----------------------------------------------------------------------------
+// Load Registered School Indicator
+// ----------------------------------------------------------------------------
+export const loadIsSchool = async (academicCreds, account, dispatch) => {
+
+  const isSchool = await academicCreds.isSchool(account)
+  dispatch(setIsSchool(isSchool))
 }
