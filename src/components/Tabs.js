@@ -3,7 +3,7 @@ import { LinkContainer } from "react-router-bootstrap"
 
 const Tabs = () => {
   return (
-    <Nav variant="pills" defaultActiveKey="/" className='justify-content-center my-4'>
+    <>
       <LinkContainer to="/">
         <Nav.Link>View Transcripts</Nav.Link>
       </LinkContainer>
@@ -16,7 +16,7 @@ const Tabs = () => {
       <LinkContainer to="/issue-diplomas">
         <Nav.Link>Issue Diplomas</Nav.Link>
       </LinkContainer>
-    </Nav>
+    </>
   )
 }
 

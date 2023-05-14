@@ -58,8 +58,6 @@ function App() {
 
         <hr />
 
-        <Tabs />
-
         <Routes>
           <Route exact path="/" element={<ViewTranscripts />} />
           <Route path="/view-diplomas" element={<ViewDiplomas />} />
