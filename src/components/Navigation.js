@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-import { loadAccount, loadBalances } from '../store/interactions'
+import { loadAccount, loadIsSchool } from '../store/interactions'
 import config from '../config.json'
 
 import logo from '../SW3_logo_small.png'
@@ -18,8 +18,10 @@ const Navigation = () => {
   const dispatch = useDispatch()
 
   const connectHandler = async () => {
+    // "Connect" button pressed ... load current account
     const account = await loadAccount(dispatch)
-    //await loadBalances(amm, tokens, account, dispatch)
+    // load the 'isSchool' indicator for this account
+    await loadIsSchool(academicCreds, account, dispatch)
   }
 
   const networkHandler = async (e) => {

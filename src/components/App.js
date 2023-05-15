@@ -39,17 +39,19 @@ function App() {
       window.location.reload()
     })
 
-    // fetch current account from Metamask when changed
-    window.ethereum.on('accountsChanged', async () => {
-      account = await loadAccount(dispatch)
-    })
-
     // initiate contracts
     await loadCredentials(provider, chainId, dispatch)
     academicCreds = await loadAcademicCreds(provider, chainId, dispatch)
 
-    // set the isSchool indicator for the current account
-    await loadIsSchool(academicCreds, account, dispatch)
+    // fetch current account from Metamask when changed
+    window.ethereum.on('accountsChanged', async () => {
+
+      account = await loadAccount(dispatch)
+
+      // load the isSchool indicator for the account
+      await loadIsSchool(academicCreds, account, dispatch)
+    })
+
   }
 
   useEffect(() => {
