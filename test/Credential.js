@@ -8,6 +8,10 @@ describe('Credential', () => {
   const SYMBOL1 = 'TSCRP'
   const NAME2 = 'Diploma'
   const SYMBOL2 = 'DPLMA'
+  const URI1 =
+    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00001.json";
+  const URI2 =
+    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00002.json";
 
   let deployer, school1, student1, student2
 
@@ -68,7 +72,7 @@ describe('Credential', () => {
         // issue a transcript to student1 via school1
         transaction =
           await academicCreds.connect(school1).issueCredential(
-            student1.address, transcriptCred.address, BASE_URI);
+            student1.address, transcriptCred.address, URI1);
         result = await transaction.wait()
       })
 
@@ -79,6 +83,18 @@ describe('Credential', () => {
 
       it('returns the correct balance', async () => {
         expect(await transcriptCred.balanceOf(student1.address)).to.equal(1)
+      })
+
+      it('returns owner tokens and token URIs', async () => {
+        // issue a 2nd Transcript
+        transaction =
+          await academicCreds.connect(school1).issueCredential(
+            student1.address, transcriptCred.address, URI2);
+        result = await transaction.wait()
+
+        let tokenIds = await transcriptCred.walletOfOwner(student1.address)
+        expect(await transcriptCred.tokenURI(tokenIds[0])).to.equal(URI1)
+        expect(await transcriptCred.tokenURI(tokenIds[1])).to.equal(URI2)
       })
     })
 

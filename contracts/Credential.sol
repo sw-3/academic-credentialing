@@ -51,11 +51,24 @@ contract Credential is ERC721,
         academicCredsAddress = _address;
     }
 
+    // the mint function can only be called via the AcademicCreds contract
     function safeMint(address to, string memory uri) public onlyAcademicCreds {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+    }
+
+    // function to return list of Credentials owned by an account
+    function walletOfOwner(address _owner) public view returns(uint256[] memory) {
+
+        uint256 ownerTokenCount = balanceOf(_owner);
+        uint256[] memory tokenIds = new uint256[](ownerTokenCount);
+
+        for(uint256 i; i < ownerTokenCount; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(_owner, i);
+        }
+        return tokenIds;
     }
 
     // The following functions are overrides required by Solidity.
