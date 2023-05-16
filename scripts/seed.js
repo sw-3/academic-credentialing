@@ -8,7 +8,7 @@ const hre = require("hardhat");
 const config = require('../src/config.json')
 
 async function main() {
-  console.log(`Fetching accounts & network \n`)
+  console.log(`\nFetching accounts & network \n`)
   const accounts = await ethers.getSigners()
   const deployer = accounts[0]
   const school1 = accounts[1]
@@ -19,14 +19,14 @@ async function main() {
 
   const { chainId } = await ethers.provider.getNetwork()
 
-  console.log(`Fetching Credentials... \n`)
+  console.log(`\nFetching Credentials contracts... \n`)
 
   const transcriptCred = await ethers.getContractAt('Credential', config[chainId].transcriptCred.address)
   console.log(`   transcriptCred contract fetched: ${transcriptCred.address}\n`)
   const diplomaCred = await ethers.getContractAt('Credential', config[chainId].diplomaCred.address)
   console.log(`   diplomaCred contract fetched: ${diplomaCred.address}\n`)
 
-  console.log(`Fetching Academic Credentials contract... \n`)
+  console.log(`\nFetching Academic Credentials contract... \n`)
 
   const academicCreds = await ethers.getContractAt('AcademicCreds', config[chainId].academicCreds.address)
   console.log(`   academicCreds contract fetched: ${academicCreds.address}\n`)
@@ -34,9 +34,9 @@ async function main() {
   // register a school with the academicCreds contract
 
   let transaction
-  const schoolName = "Montana State University"
+  const schoolName = "Great State University"
 
-  console.log(`Registering a school...\n`)
+  console.log(`\nRegistering a school...\n`)
   transaction = await academicCreds.connect(deployer).registerSchool(school1.address, schoolName)
   await transaction.wait()
 
@@ -45,10 +45,30 @@ async function main() {
   if (isSchool) {
     console.log(`   ${retrievedName} registered successfully: ${school1.address}.\n`)
   } else {
-    console.log(`   Restration failed.`)
+    console.log(`   Registration failed.\n`)
   }
-  console.log(`Done.\n`)
 
+  console.log(`\nIssuing 2 Transcripts...\n`)
+
+  const URI1 =
+    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00001.json";
+  transaction = await academicCreds.connect(school1).issueCredential(
+                    student1.address, transcriptCred.address, URI1)
+  await transaction.wait()
+  const URI2 =
+    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00002.json";
+  transaction = await academicCreds.connect(school1).issueCredential(
+                    student1.address, transcriptCred.address, URI2)
+  await transaction.wait()
+
+  const balance = await transcriptCred.balanceOf(student1.address)
+  if (balance == 2) {
+    console.log(`   Issued 2 Transcripts to: ${student1.address}\n`)
+  } else {
+    console.log(`   Failed to issue transcripts; balance = ${balance}\n`)
+  }
+
+  console.log(`\nDone.\n`)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
