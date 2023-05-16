@@ -1,0 +1,24 @@
+{
+  "name": "TSCRP_00002",
+  "description": "This is an official college transcript.",
+  "date": 1463508000,
+  "issuer": "Great State University",
+  "issuer_account": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "recipient": "Some J. Student",
+  "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+  "credential_image": "ipfs://...",
+  "attributes": [
+    {
+      "trait_type": "credential",
+      "value": "Transcript"
+    },
+    {
+      "trait_type": "school_year",
+      "value": "2015-2016"
+    },
+    {
+      "trait_type": "semester",
+      "value": "Spring"
+    }
+  ]
+}

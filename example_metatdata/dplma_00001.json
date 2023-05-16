@@ -1,0 +1,32 @@
+{
+  "name": "DPLMA_00001",
+  "description": "This is an official college diploma.",
+  "date": 1526407200,
+  "issuer": "Great State University",
+  "issuer_account": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "recipient": "Some J. Student",
+  "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+  "credential_image": "ipfs://...",
+  "attributes": [
+    {
+      "trait_type": "credential",
+      "value": "Diploma"
+    },
+    {
+      "trait_type": "degree_level",
+      "value": "Bachelor"
+    },
+    {
+      "trait_type": "degree_category",
+      "value": "Science"
+    },
+    {
+      "trait_type": "degree_symbol",
+      "value": "BS"
+    },
+    {
+      "trait_type": "degree_subject",
+      "value": "Computer Science"
+    }
+  ]
+}
