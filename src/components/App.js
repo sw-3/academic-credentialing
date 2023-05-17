@@ -18,7 +18,9 @@ import {
   loadAccount,
   loadCredentials,
   loadAcademicCreds,
-  loadIsSchool
+  loadIsSchool,
+  loadOwnedTranscripts,
+  loadOwnedDiplomas
 } from '../store/interactions'
 
 function App() {
@@ -26,7 +28,8 @@ function App() {
   const dispatch = useDispatch()
 
   const loadBlockchainData = async () => {
-    let account, academicCreds
+    let account, academicCreds, credentials
+    let transcriptCred, diplomaCred
 
     // initiate provider
     const provider = await loadProvider(dispatch)
@@ -40,7 +43,9 @@ function App() {
     })
 
     // initiate contracts
-    await loadCredentials(provider, chainId, dispatch)
+    credentials = await loadCredentials(provider, chainId, dispatch)
+    transcriptCred = credentials[0]
+    diplomaCred = credentials[1]
     academicCreds = await loadAcademicCreds(provider, chainId, dispatch)
 
     // fetch current account from Metamask when changed
@@ -50,6 +55,10 @@ function App() {
 
       // load the isSchool indicator for the account
       await loadIsSchool(academicCreds, account, dispatch)
+
+      // load the credentials owned by the account
+      await loadOwnedTranscripts(transcriptCred, account, dispatch)
+      await loadOwnedDiplomas(diplomaCred, account, dispatch)
     })
 
   }

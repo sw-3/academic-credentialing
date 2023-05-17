@@ -13,7 +13,9 @@ import {
 
 import {
   setContract,
-  setIsSchool
+  setIsSchool,
+  setOwnedTranscripts,
+  setOwnedDiplomas
 } from './reducers/academicCreds'
 
 import CREDENTIAL_ABI from '../abis/Credential.json'
@@ -61,6 +63,8 @@ export const loadCredentials = async (provider, chainId, dispatch) => {
 
   dispatch(setContracts([transcriptCred, diplomaCred]))
   dispatch(setSymbols([await transcriptCred.symbol(), await diplomaCred.symbol()]))
+
+  return [transcriptCred, diplomaCred]
 }
 
 export const loadAcademicCreds = async (provider, chainId, dispatch) => {
@@ -79,7 +83,19 @@ export const loadAcademicCreds = async (provider, chainId, dispatch) => {
 // Load Registered School Indicator
 // ----------------------------------------------------------------------------
 export const loadIsSchool = async (academicCreds, account, dispatch) => {
-
   const isSchool = await academicCreds.isSchool(account)
   dispatch(setIsSchool(isSchool))
+}
+
+// ----------------------------------------------------------------------------
+// Load credentials owned by account
+// ----------------------------------------------------------------------------
+export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) => {
+  const ownedTranscripts = await transcriptCred.walletOfOwner(account)
+  dispatch(setOwnedTranscripts(ownedTranscripts))
+}
+
+export const loadOwnedDiplomas = async (diplomaCred, account, dispatch) => {
+  const ownedDiplomas = await diplomaCred.walletOfOwner(account)
+  dispatch(setOwnedDiplomas(ownedDiplomas))
 }
