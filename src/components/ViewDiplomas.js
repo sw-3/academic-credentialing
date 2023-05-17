@@ -7,9 +7,6 @@ import Tabs from './Tabs'
 
 const logoColor = '#0f2a87'
 
-// add 'disabled' to disable a link:
-//     <LinkContainer to="/issue-diplomas" disabled>
-
 const ViewDiplomas = () => {
 
   const account = useSelector(state => state.provider.account)

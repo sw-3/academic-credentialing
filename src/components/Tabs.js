@@ -14,24 +14,12 @@ const Tabs = () => {
       <LinkContainer to="/view-diplomas">
         <Nav.Link>View Diplomas</Nav.Link>
       </LinkContainer>
-      {isSchoolAccount ? (
-        <LinkContainer to="/issue-transcripts">
-          <Nav.Link>Issue Transcripts</Nav.Link>
-        </LinkContainer>
-      ) : (
-        <LinkContainer to="/issue-transcripts" disabled>
-          <Nav.Link>Issue Transcripts</Nav.Link>
-        </LinkContainer>
-      )}
-      {isSchoolAccount ? (
-        <LinkContainer to="/issue-diplomas">
-          <Nav.Link>Issue Diplomas</Nav.Link>
-        </LinkContainer>
-      ) : (
-        <LinkContainer to="/issue-diplomas" disabled>
-          <Nav.Link>Issue Diplomas</Nav.Link>
-        </LinkContainer>
-      )}
+      <LinkContainer to="/issue-transcripts">
+        <Nav.Link>Issue Transcripts</Nav.Link>
+      </LinkContainer>
+      <LinkContainer to="/issue-diplomas">
+        <Nav.Link>Issue Diplomas</Nav.Link>
+      </LinkContainer>
     </>
   )
 }

@@ -7,12 +7,10 @@ import Tabs from './Tabs'
 
 const logoColor = '#0f2a87'
 
-// add 'disabled' to disable a link:
-//     <LinkContainer to="/issue-diplomas" disabled>
-
 const IssueTranscripts = () => {
 
   const account = useSelector(state => state.provider.account)
+  const isSchoolAccount = useSelector(state => state.academicCreds.isSchool)
 
   return (
     <div>
@@ -25,12 +23,21 @@ const IssueTranscripts = () => {
 
         <Card.Body>
           {account ? (
-            <div>
-              <Card.Title className="text-center my-3">Issue Transcripts Tab</Card.Title>
-              <Card.Text>
-                Here is where content goes...
-              </Card.Text>
-            </div>
+            isSchoolAccount ? (
+              <div>
+                <Card.Title className="text-center my-3">Issue Transcripts Tab</Card.Title>
+                <Card.Text>
+                  Here is where content goes...
+                </Card.Text>
+              </div>
+            ) : (
+              <div>
+                <Card.Title className="text-center my-3">Only registered accounts can issue transcripts.</Card.Title>
+                <Card.Text className="text-center my-3">
+                  Contact us to register your school account.
+                </Card.Text>
+              </div>
+            )
           ) : (
             <Card.Title className="text-center my-3">Please connect wallet.</Card.Title>
           )}
