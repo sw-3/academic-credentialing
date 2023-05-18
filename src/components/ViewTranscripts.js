@@ -1,5 +1,6 @@
 import Card from 'react-bootstrap/Card'
 import Nav from 'react-bootstrap/Nav'
+import Table from 'react-bootstrap/Table'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -10,6 +11,8 @@ const logoColor = '#0f2a87'
 const ViewTranscripts = () => {
 
   const account = useSelector(state => state.provider.account)
+  const ownedTranscripts =
+    useSelector(state => state.academicCreds.ownedTranscripts)
 
   return (
     <div>
@@ -23,10 +26,41 @@ const ViewTranscripts = () => {
         <Card.Body>
           {account ? (
             <div>
-              <Card.Title className="text-center my-3">View Transcripts Tab</Card.Title>
-              <Card.Text>
-                Here is where content goes...
-              </Card.Text>
+              <Card.Title className="text-center my-3">Owned Transcripts</Card.Title>
+              <Card.Text> </Card.Text>
+
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Issue Date</th>
+                    <th>Issuer</th>
+                    <th>Issuer Account</th>
+                    <th>Recipient</th>
+                    <th>Recipient Account</th>
+                    <th>School Year</th>
+                    <th>Semester</th>
+                    <th>PDF</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ownedTranscripts.map((transcriptId, index) => (
+                    <>
+                      <tr key={(index)}>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </Table>
             </div>
           ) : (
             <Card.Title className="text-center my-3">Please connect wallet.</Card.Title>
