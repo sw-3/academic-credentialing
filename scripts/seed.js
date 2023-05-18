@@ -50,13 +50,13 @@ async function main() {
 
   console.log(`\nIssuing 2 Transcripts...\n`)
 
-  const URI1 =
-    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00001.json";
+//  const URI1 = "https://ipfs.io/ipfs/QmTtYjAyLaznJCHjEyu3fE45b6gkb5pNmc55HbCQJ22EGn?filename=tscrp_00001.json";
+  const URI1 = "http://bafybeicsoza5aqifqxfleqyvtqhsc2m76kvsuj3gaiey3bvkvqibbn2kp4.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school1).issueCredential(
                     student1.address, transcriptCred.address, URI1)
   await transaction.wait()
-  const URI2 =
-    "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_metadata/tscrp_00002.json";
+//  const URI2 = "https://ipfs.io/ipfs/QmbuyqceNYEqU7k6cdrfdxkMzkX4rujP9yov1Pzw91emmo?filename=tscrp_00002.json";
+  const URI2 = "http://bafybeigjwg47w2kejcgcgc4537awge55ekksvnphkdqn4jnig6sfdejddy.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school1).issueCredential(
                     student1.address, transcriptCred.address, URI2)
   await transaction.wait()

@@ -6,7 +6,7 @@
   "issuer_account": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
   "recipient": "Some J. Student",
   "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-  "credential_image": "file://localhost//home/scottdev/devel/dappu/academic-credentials/example_images/dplma_00002.pdf",
+  "credential_image": "https://ipfs.io/ipfs/QmUJx77FrYQ49GkfHkxkF7m6eWjekwxq2EbdSRVrGR79Wg?filename=dplma_00002.pdf",
   "attributes": [
     {
       "trait_type": "credential",

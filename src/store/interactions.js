@@ -88,10 +88,24 @@ export const loadIsSchool = async (academicCreds, account, dispatch) => {
 }
 
 // ----------------------------------------------------------------------------
-// Load credentials owned by account
+// Load the json for credentials owned by account
 // ----------------------------------------------------------------------------
 export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) => {
-  const ownedTranscripts = await transcriptCred.walletOfOwner(account)
+  const ownedTokenIds = await transcriptCred.walletOfOwner(account)
+  const count = ownedTokenIds.length
+  const ownedTranscripts = []
+
+  for (var i=0; i < count; i++) {
+    const tokenID = ownedTokenIds[i]
+    const uri = await transcriptCred.tokenURI(tokenID)
+
+    const response = await fetch(uri)
+    if(!response.ok)
+      throw new Error(response.statusText)
+
+    const json = await response.json()
+    ownedTranscripts.push(json)
+  }
   dispatch(setOwnedTranscripts(ownedTranscripts))
 }
 

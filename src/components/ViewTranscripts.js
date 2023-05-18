@@ -44,14 +44,14 @@ const ViewTranscripts = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {ownedTranscripts.map((transcriptId, index) => (
+                  {ownedTranscripts.map((transcript, index) => (
                     <>
                       <tr key={(index)}>
                         <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
+                        <td>{transcript.issuer}</td>
+                        <td>{transcript.issuer_account}</td>
+                        <td>{transcript.recipient}</td>
+                        <td>{transcript.recipient_account}</td>
                         <td>...</td>
                         <td>...</td>
                         <td>...</td>
