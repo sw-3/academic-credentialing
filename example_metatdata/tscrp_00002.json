@@ -1,4 +1,5 @@
 {
+  "credential": "Transcript",
   "name": "TSCRP_00002",
   "description": "This is an official college transcript.",
   "date": 1463508000,
@@ -7,18 +8,6 @@
   "recipient": "Some J. Student",
   "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
   "credential_image": "http://bafybeibrjw6geq2wgbhx4coce5uabcz4k5xngyrkonr2ldf2vt3geqyjnm.ipfs.localhost:8080/",
-  "attributes": [
-    {
-      "trait_type": "credential",
-      "value": "Transcript"
-    },
-    {
-      "trait_type": "school_year",
-      "value": "2015-2016"
-    },
-    {
-      "trait_type": "semester",
-      "value": "Spring"
-    }
-  ]
+  "school_year": "2015-2016",
+  "semester": "Spring"
 }
