@@ -34,16 +34,13 @@ const ViewTranscripts = () => {
   const addressHandler = async (e) => {
     e.preventDefault()
 
-    let credentials
-    let transcriptCred
-
     try {
       if (address !== "")
       {
         const provider = await loadProvider(dispatch)
         const chainId = await loadNetwork(provider, dispatch)
-        credentials = await loadCredentials(provider, chainId, dispatch)
-        transcriptCred = credentials[0]
+        const credentials = await loadCredentials(provider, chainId, dispatch)
+        const transcriptCred = credentials[0]
         await loadOwnedTranscripts(transcriptCred, address, dispatch)
       }
       else
@@ -55,8 +52,25 @@ const ViewTranscripts = () => {
     }
   }
 
-  function deleteHandler(_transcriptId) {
-    console.log(_transcriptId)
+  const deleteHandler = async (_transcriptId) => {
+    try {
+      // get signer and contract
+      const provider = await loadProvider(dispatch)
+      const signer = await provider.getSigner()
+      const chainId = await loadNetwork(provider, dispatch)
+      const credentials = await loadCredentials(provider, chainId, dispatch)
+      const transcriptCred = credentials[0]
+
+      // burn the token to delete it
+      const transaction = await transcriptCred.connect(signer).burn(_transcriptId)
+      await transaction.wait()
+
+      // reload the owned transcripts into Redux
+      await loadOwnedTranscripts(transcriptCred, account, dispatch)
+
+    } catch {
+      window.alert('User rejected or transaction reverted')
+    }
   }
 
   return (
@@ -109,7 +123,7 @@ const ViewTranscripts = () => {
                               <Button
                                 variant='danger'
                                 style={{ width: '100%' }}
-                                onClick={() => deleteHandler(index)}
+                                onClick={() => deleteHandler(transcript.tokenId)}
                               >
                                 Delete
                               </Button>

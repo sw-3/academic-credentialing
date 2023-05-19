@@ -34,16 +34,13 @@ const ViewDiplomas = () => {
   const addressHandler = async (e) => {
     e.preventDefault()
 
-    let credentials
-    let diplomaCred
-
     try {
       if (address !== "")
       {
         const provider = await loadProvider(dispatch)
         const chainId = await loadNetwork(provider, dispatch)
-        credentials = await loadCredentials(provider, chainId, dispatch)
-        diplomaCred = credentials[1]
+        const credentials = await loadCredentials(provider, chainId, dispatch)
+        const diplomaCred = credentials[1]
         await loadOwnedDiplomas(diplomaCred, address, dispatch)
       }
       else
@@ -55,8 +52,25 @@ const ViewDiplomas = () => {
     }
   }
 
-  function deleteHandler(_diplomaId) {
-    console.log(_diplomaId)
+  const deleteHandler = async (_diplomaId) => {
+    try {
+      // get signer and contract
+      const provider = await loadProvider(dispatch)
+      const signer = await provider.getSigner()
+      const chainId = await loadNetwork(provider, dispatch)
+      const credentials = await loadCredentials(provider, chainId, dispatch)
+      const diplomaCred = credentials[1]
+
+      // burn the token to delete it
+      const transaction = await diplomaCred.connect(signer).burn(_diplomaId)
+      await transaction.wait()
+
+      // reload the owned transcripts into Redux
+      await loadOwnedDiplomas(diplomaCred, account, dispatch)
+
+    } catch {
+      window.alert('User rejected or transaction reverted')
+    }
   }
 
   return (
@@ -109,7 +123,7 @@ const ViewDiplomas = () => {
                               <Button
                                 variant='danger'
                                 style={{ width: '100%' }}
-                                onClick={() => deleteHandler(index)}
+                                onClick={() => deleteHandler(diploma.tokenId)}
                               >
                                 Delete
                               </Button>

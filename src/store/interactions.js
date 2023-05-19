@@ -103,7 +103,8 @@ export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) =>
     if(!response.ok)
       throw new Error(response.statusText)
 
-    const json = await response.json()
+    let json = await response.json()
+    json.tokenId = Number(tokenID)
     ownedTranscripts.push(json)
   }
   dispatch(setOwnedTranscripts(ownedTranscripts))
@@ -122,7 +123,8 @@ export const loadOwnedDiplomas = async (diplomaCred, account, dispatch) => {
     if(!response.ok)
       throw new Error(response.statusText)
 
-    const json = await response.json()
+    let json = await response.json()
+    json.tokenId = Number(tokenID)
     ownedDiplomas.push(json)
   }
   dispatch(setOwnedDiplomas(ownedDiplomas))
