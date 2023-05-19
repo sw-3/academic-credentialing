@@ -33,9 +33,7 @@ const IssueDiplomas = () => {
             ) : (
               <div>
                 <Card.Title className="text-center my-3">Only registered accounts can issue diplomas.</Card.Title>
-                <Card.Text className="text-center my-3">
-                  Contact us to register your school account.
-                </Card.Text>
+                <Card.Text className="text-center my-3"> </Card.Text>
               </div>
             )
           ) : (
