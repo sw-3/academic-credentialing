@@ -110,6 +110,20 @@ export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) =>
 }
 
 export const loadOwnedDiplomas = async (diplomaCred, account, dispatch) => {
-  const ownedDiplomas = await diplomaCred.walletOfOwner(account)
+  const ownedTokenIds = await diplomaCred.walletOfOwner(account)
+  const count = ownedTokenIds.length
+  const ownedDiplomas = []
+
+  for (var i=0; i < count; i++) {
+    const tokenID = ownedTokenIds[i]
+    const uri = await diplomaCred.tokenURI(tokenID)
+
+    const response = await fetch(uri)
+    if(!response.ok)
+      throw new Error(response.statusText)
+
+    const json = await response.json()
+    ownedDiplomas.push(json)
+  }
   dispatch(setOwnedDiplomas(ownedDiplomas))
 }

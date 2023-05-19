@@ -1,4 +1,5 @@
 {
+  "credential": "Diploma",
   "name": "DPLMA_00002",
   "description": "This is an official college diploma.",
   "date": 1652810400,
@@ -6,27 +7,9 @@
   "issuer_account": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
   "recipient": "Some J. Student",
   "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-  "credential_image": "https://ipfs.io/ipfs/QmUJx77FrYQ49GkfHkxkF7m6eWjekwxq2EbdSRVrGR79Wg?filename=dplma_00002.pdf",
-  "attributes": [
-    {
-      "trait_type": "credential",
-      "value": "Diploma"
-    },
-    {
-      "trait_type": "degree_level",
-      "value": "Master"
-    },
-    {
-      "trait_type": "degree_category",
-      "value": "Science"
-    },
-    {
-      "trait_type": "degree_symbol",
-      "value": "MS"
-    },
-    {
-      "trait_type": "degree_subject",
-      "value": "Computer Science"
-    }
-  ]
+  "credential_image": "http://bafybeicyw2qvzyjfbery74iw6oddamdugivbta3cujq772riex5g5bxu5e.ipfs.localhost:8080/",
+  "degree_level": "Master",
+  "degree_category": "Science",
+  "degree_symbol": "MS",
+  "degree_subject": "Computer Science"
 }

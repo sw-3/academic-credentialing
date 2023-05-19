@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
-import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 
@@ -39,7 +38,7 @@ const ViewTranscripts = () => {
     let transcriptCred
 
     try {
-      if (address != "")
+      if (address !== "")
       {
         const provider = await loadProvider(dispatch)
         const chainId = await loadNetwork(provider, dispatch)
@@ -106,7 +105,7 @@ const ViewTranscripts = () => {
                           <td>{transcript.semester}</td>
                           <td><a href={transcript.credential_image} target='_blank'>PDF</a></td>
                           <td>
-                            {(account == transcript.recipient_account) && (
+                            {(account === transcript.recipient_account) && (
                               <Button
                                 variant='danger'
                                 style={{ width: '100%' }}
