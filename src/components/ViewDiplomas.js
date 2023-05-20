@@ -13,7 +13,8 @@ import dayjs from 'dayjs'
 import Tabs from './Tabs'
 
 import {
-  loadOwnedDiplomas
+  loadOwnedCreds,
+  deleteCred
 } from '../store/interactions'
 
 const logoColor = '#0f2a87'
@@ -40,7 +41,7 @@ const ViewDiplomas = () => {
       if (address !== '')
       {
         // load the Diplomas owned by the address entered
-        await loadOwnedDiplomas(diplomaCred, address, dispatch)
+        await loadOwnedCreds(diplomaCred, address, dispatch)
       } else {
         window.alert('Enter a wallet address to view')
       }
@@ -51,15 +52,11 @@ const ViewDiplomas = () => {
 
   const deleteHandler = async (_diplomaId) => {
     try {
-      // get signer
-      const signer = await provider.getSigner()
 
-      // burn the diploma token to delete it
-      const transaction = await diplomaCred.connect(signer).burn(_diplomaId)
-      await transaction.wait()
+      await deleteCred(provider, diplomaCred, _diplomaId)
 
       // reload the owned diplomas into Redux
-      await loadOwnedDiplomas(diplomaCred, account, dispatch)
+      await loadOwnedCreds(diplomaCred, account, dispatch)
 
     } catch {
       window.alert('User rejected or transaction reverted')

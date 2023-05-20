@@ -19,8 +19,7 @@ import {
   loadCredentials,
   loadAcademicCreds,
   loadIsSchool,
-  loadOwnedTranscripts,
-  loadOwnedDiplomas
+  loadOwnedCreds
 } from '../store/interactions'
 
 function App() {
@@ -56,9 +55,11 @@ function App() {
       // load the isSchool indicator for the account
       await loadIsSchool(academicCreds, account, dispatch)
 
-      // load the credentials owned by the account
-      await loadOwnedTranscripts(transcriptCred, account, dispatch)
-      await loadOwnedDiplomas(diplomaCred, account, dispatch)
+      // load the transcripts owned by the account
+      await loadOwnedCreds(transcriptCred, account, dispatch)
+
+      // load the diplomas owned by the account
+      await loadOwnedCreds(diplomaCred, account, dispatch)
     })
 
   }

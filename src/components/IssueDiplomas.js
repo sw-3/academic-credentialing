@@ -10,7 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Tabs from './Tabs'
 
 import {
-  loadOwnedDiplomas
+  loadOwnedCreds,
+  issueCred
 } from '../store/interactions'
 
 const logoColor = '#0f2a87'
@@ -36,16 +37,12 @@ const IssueDiplomas = () => {
     try {
       if (address !== '' && uri !== '')
       {
-        // get signer
-        const signer = await provider.getSigner()
-
         // issue diploma token to wallet address
-        const transaction = await academicCreds.connect(signer).issueCredential(
-                      address, diplomaCred.address, uri)
-        await transaction.wait()
+        await issueCred(provider, academicCreds, address, diplomaCred.address, uri)
 
         // reset the owned diplomas list in Redux
-        await loadOwnedDiplomas(diplomaCred, account, dispatch)
+        await loadOwnedCreds(diplomaCred, account, dispatch)
+
       } else {
         window.alert('Enter the metadata URI and a wallet address')
       }

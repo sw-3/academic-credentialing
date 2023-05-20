@@ -6,8 +6,7 @@ import Button from 'react-bootstrap/Button'
 import {
   loadAccount,
   loadIsSchool,
-  loadOwnedTranscripts,
-  loadOwnedDiplomas
+  loadOwnedCreds
 } from '../store/interactions'
 
 import config from '../config.json'
@@ -26,11 +25,13 @@ const Navigation = () => {
   const connectHandler = async () => {
     // "Connect" button pressed ... load current account
     const account = await loadAccount(dispatch)
+
     // load the 'isSchool' indicator for this account
     await loadIsSchool(academicCreds, account, dispatch)
+
     // load the credentials owned by the account
-    await loadOwnedTranscripts(credentials[0], account, dispatch)
-    await loadOwnedDiplomas(credentials[1], account, dispatch)
+    await loadOwnedCreds(credentials[0], account, dispatch)
+    await loadOwnedCreds(credentials[1], account, dispatch)
   }
 
   const networkHandler = async (e) => {

@@ -90,14 +90,15 @@ export const loadIsSchool = async (academicCreds, account, dispatch) => {
 // ----------------------------------------------------------------------------
 // Load the json for credentials owned by account
 // ----------------------------------------------------------------------------
-export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) => {
-  const ownedTokenIds = await transcriptCred.walletOfOwner(account)
+export const loadOwnedCreds = async (credential, account, dispatch) => {
+  const symbol = await credential.symbol()
+  const ownedTokenIds = await credential.walletOfOwner(account)
   const count = ownedTokenIds.length
-  const ownedTranscripts = []
+  const ownedCredentials = []
 
   for (var i=0; i < count; i++) {
     const tokenID = ownedTokenIds[i]
-    const uri = await transcriptCred.tokenURI(tokenID)
+    const uri = await credential.tokenURI(tokenID)
 
     const response = await fetch(uri)
     if(!response.ok)
@@ -105,27 +106,44 @@ export const loadOwnedTranscripts = async (transcriptCred, account, dispatch) =>
 
     let json = await response.json()
     json.tokenId = Number(tokenID)
-    ownedTranscripts.push(json)
+    ownedCredentials.push(json)
   }
-  dispatch(setOwnedTranscripts(ownedTranscripts))
+
+  if (symbol === 'TSCRP') {
+    dispatch(setOwnedTranscripts(ownedCredentials))
+  }
+  else if (symbol === 'DPLMA') {
+    dispatch(setOwnedDiplomas(ownedCredentials))
+  }
 }
 
-export const loadOwnedDiplomas = async (diplomaCred, account, dispatch) => {
-  const ownedTokenIds = await diplomaCred.walletOfOwner(account)
-  const count = ownedTokenIds.length
-  const ownedDiplomas = []
+// ----------------------------------------------------------------------------
+// Issue a credential on the blockchain
+// ----------------------------------------------------------------------------
+export const issueCred = async (provider, academicCreds, toAddress, credAddress, uri) => {
 
-  for (var i=0; i < count; i++) {
-    const tokenID = ownedTokenIds[i]
-    const uri = await diplomaCred.tokenURI(tokenID)
+  let transaction
 
-    const response = await fetch(uri)
-    if(!response.ok)
-      throw new Error(response.statusText)
+  const signer = await provider.getSigner()
 
-    let json = await response.json()
-    json.tokenId = Number(tokenID)
-    ownedDiplomas.push(json)
-  }
-  dispatch(setOwnedDiplomas(ownedDiplomas))
+  transaction = await academicCreds.connect(signer).issueCredential(
+    toAddress, credAddress, uri)
+
+  await transaction.wait()
+
+}
+
+// ----------------------------------------------------------------------------
+// Delete a credential from the blockchain
+// ----------------------------------------------------------------------------
+export const deleteCred = async (provider, credential, credId) => {
+
+  let transaction
+
+  const signer = await provider.getSigner()
+
+  // burn the token to delete it
+  transaction = await credential.connect(signer).burn(credId)
+  await transaction.wait()
+
 }

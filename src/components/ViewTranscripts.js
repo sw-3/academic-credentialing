@@ -13,7 +13,8 @@ import dayjs from 'dayjs'
 import Tabs from './Tabs'
 
 import {
-  loadOwnedTranscripts
+  loadOwnedCreds,
+  deleteCred
 } from '../store/interactions'
 
 const logoColor = '#0f2a87'
@@ -40,7 +41,7 @@ const ViewTranscripts = () => {
       if (address !== '')
       {
         // load the transcripts owned by the address entered
-        await loadOwnedTranscripts(transcriptCred, address, dispatch)
+        await loadOwnedCreds(transcriptCred, address, dispatch)
       } else {
         window.alert('Enter a wallet address to view')
       }
@@ -52,15 +53,11 @@ const ViewTranscripts = () => {
   // function to handle a delete transcript button press
   const deleteHandler = async (_transcriptId) => {
     try {
-      // get signer
-      const signer = await provider.getSigner()
 
-      // burn the transcript token to delete it
-      const transaction = await transcriptCred.connect(signer).burn(_transcriptId)
-      await transaction.wait()
+      await deleteCred(provider, transcriptCred, _transcriptId)
 
       // reload the owned transcripts into Redux
-      await loadOwnedTranscripts(transcriptCred, account, dispatch)
+      await loadOwnedCreds(transcriptCred, account, dispatch)
 
     } catch {
       window.alert('User rejected or transaction reverted')
