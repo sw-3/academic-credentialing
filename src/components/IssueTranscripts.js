@@ -46,6 +46,8 @@ const IssueTranscripts = () => {
 
         // reset the owned transcripts list in Redux
         await loadOwnedTranscripts(transcriptCred, account, dispatch)
+      } else {
+        window.alert('Enter the metadata URI and a wallet address')
       }
     } catch {
       window.alert('User rejected or transaction reverted')

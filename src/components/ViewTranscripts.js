@@ -37,17 +37,15 @@ const ViewTranscripts = () => {
     e.preventDefault()
 
     try {
-      if (address !== "")
+      if (address !== '')
       {
         // load the transcripts owned by the address entered
         await loadOwnedTranscripts(transcriptCred, address, dispatch)
-      }
-      else
-      {
-        setAddress(account)
+      } else {
+        window.alert('Enter a wallet address to view')
       }
     } catch {
-      window.alert('User rejected or transaction reverted')
+      window.alert('Could not load transcript data.\nBe sure you entered a valid address.')
     }
   }
 

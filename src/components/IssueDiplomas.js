@@ -46,6 +46,8 @@ const IssueDiplomas = () => {
 
         // reset the owned diplomas list in Redux
         await loadOwnedDiplomas(diplomaCred, account, dispatch)
+      } else {
+        window.alert('Enter the metadata URI and a wallet address')
       }
     } catch {
       window.alert('User rejected or transaction reverted')
