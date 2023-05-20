@@ -77,7 +77,7 @@ const ViewTranscripts = () => {
     <div>
       <Card className='mx-auto px-4' style={{ color: logoColor }}>
         <Card.Header>
-          <Nav className="justify-content-center" variant="tabs" defaultActiveKey="/" style={{ color: logoColor }}>
+          <Nav className='justify-content-center' variant='tabs' defaultActiveKey='/'>
             <Tabs />
           </Nav>
         </Card.Header>
@@ -86,7 +86,7 @@ const ViewTranscripts = () => {
           {account ? (
             (count > 0) ? (
               <div>
-                <Card.Title className="text-center my-3">
+                <Card.Title className='text-center my-3'>
                   Transcripts Owned by: <div className='my-1'>{ownedTranscripts[0].recipient_account}</div>
                 </Card.Title>
 
@@ -136,10 +136,10 @@ const ViewTranscripts = () => {
                 </Table>
               </div>
             ) : (
-              <Card.Title className="text-center my-3">No Owned Transcripts</Card.Title>
+              <Card.Title className='text-center my-3'>No Owned Transcripts</Card.Title>
             )
           ) : (
-            <Card.Title className="text-center my-3">Please connect wallet.</Card.Title>
+            <Card.Title className='text-center my-3'>Please connect wallet.</Card.Title>
           )}
         </Card.Body>
 

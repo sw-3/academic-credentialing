@@ -59,7 +59,7 @@ async function main() {
   } else {
     console.log(`   Registration of school 2 failed.\n`)
   }
-
+/*
   console.log(`\nIssuing 2 Transcripts...`)
 
 //  const URI1 = "https://ipfs.io/ipfs/QmTtYjAyLaznJCHjEyu3fE45b6gkb5pNmc55HbCQJ22EGn?filename=tscrp_00001.json";
@@ -99,7 +99,7 @@ async function main() {
   } else {
     console.log(`   Failed to issue diplomas; balance = ${balance}\n`)
   }
-
+*/
   console.log(`\n-----     Done     -----\n\n\n`)
 }
 
