@@ -8,6 +8,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Tabs from './Tabs'
+import Alert from './Alert'
 
 import {
   loadOwnedCreds,
@@ -22,6 +23,7 @@ const IssueDiplomas = () => {
   const [address, setAddress] = useState('')
   const [uri, setUri] = useState('')
   const [isWaiting, setIsWaiting] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
 
   // fetch data from Redux state
   const provider = useSelector(state => state.provider.connection)
@@ -30,18 +32,31 @@ const IssueDiplomas = () => {
   const diplomaCred = credentials[1]
   const academicCreds = useSelector(state => state.academicCreds.contract)
   const isSchoolAccount = useSelector(state => state.academicCreds.isSchool)
+  const isIssuing = useSelector(state => state.academicCreds.issuing.isIssuing)
+  const isSuccess = useSelector(state => state.academicCreds.issuing.isSuccess)
+  const transactionHash = useSelector(state => state.academicCreds.issuing.transactionHash)
 
   const issueDiplomaHandler = async (e) => {
     e.preventDefault()
+
+    setShowAlert(false)
 
     try {
       if (address !== '' && uri !== '')
       {
         // issue diploma token to wallet address
-        await issueCred(provider, academicCreds, address, diplomaCred.address, uri)
+        await issueCred(
+          provider,
+          academicCreds,
+          address,
+          diplomaCred.address,
+          uri,
+          dispatch)
 
         // reset the owned diplomas list in Redux
         await loadOwnedCreds(diplomaCred, account, dispatch)
+
+        setShowAlert(true)
 
       } else {
         window.alert('Enter the metadata URI and a wallet address')
@@ -87,7 +102,7 @@ const IssueDiplomas = () => {
                 </Row>
 
                 <Row className='my-5'>
-                  {isWaiting ? (
+                  {isIssuing ? (
                     <Spinner animation='border' style={{ display: 'block', margin: '0 auto' }} />
                   ) : (
                     <Button type='submit' style={{ maxWidth: '250px', margin: '0 auto' }}>
@@ -108,6 +123,35 @@ const IssueDiplomas = () => {
           )}
         </Card.Body>
       </Card>
+
+      {isIssuing ? (
+        <Alert
+          message={'Issuing Diploma...'}
+          transactionHash={null}
+          variant={'info'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : isSuccess && showAlert ? (
+        <Alert
+          message={'Succes!'}
+          transactionHash={transactionHash}
+          variant={'success'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : !isSuccess && showAlert ? (
+        <Alert
+          message={'Failed!'}
+          transactionHash={null}
+          variant={'danger'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : (
+        <></>
+      )}
+
     </div>
   )
 }

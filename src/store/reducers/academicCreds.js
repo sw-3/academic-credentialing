@@ -6,7 +6,12 @@ export const academicCreds = createSlice({
     contract: null,
     isSchool: false,
     ownedTranscripts: [],
-    ownedDiplomas: []
+    ownedDiplomas: [],
+    issuing: {
+      isIssuing: false,
+      isSuccess: false,
+      transactionHash: null
+    }
   },
   reducers: {
     setContract: (state, action) => {
@@ -20,6 +25,21 @@ export const academicCreds = createSlice({
     },
     setOwnedDiplomas: (state, action) => {
       state.ownedDiplomas = action.payload
+    },
+    issueRequest: (state, action) => {
+      state.issuing.isIssuing = true
+      state.issuing.isSuccess = false
+      state.issuing.transactionHash = null
+    },
+    issueSuccess: (state, action) => {
+      state.issuing.isIssuing = false
+      state.issuing.isSuccess = true
+      state.issuing.transactionHash = action.payload
+    },
+    issueFail: (state, action) => {
+      state.issuing.isIssuing = false
+      state.issuing.isSuccess = false
+      state.issuing.transactionHash = null
     }
   }
 })
@@ -28,7 +48,10 @@ export const {
   setContract,
   setIsSchool,
   setOwnedTranscripts,
-  setOwnedDiplomas
+  setOwnedDiplomas,
+  issueRequest,
+  issueSuccess,
+  issueFail
 } = academicCreds.actions
 
 export default academicCreds.reducer;

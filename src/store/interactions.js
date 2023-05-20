@@ -15,7 +15,10 @@ import {
   setContract,
   setIsSchool,
   setOwnedTranscripts,
-  setOwnedDiplomas
+  setOwnedDiplomas,
+  issueRequest,
+  issueSuccess,
+  issueFail
 } from './reducers/academicCreds'
 
 import CREDENTIAL_ABI from '../abis/Credential.json'
@@ -120,17 +123,26 @@ export const loadOwnedCreds = async (credential, account, dispatch) => {
 // ----------------------------------------------------------------------------
 // Issue a credential on the blockchain
 // ----------------------------------------------------------------------------
-export const issueCred = async (provider, academicCreds, toAddress, credAddress, uri) => {
+export const issueCred =
+    async (provider, academicCreds, toAddress, credAddress, uri, dispatch) => {
 
-  let transaction
+  try {
+    dispatch(issueRequest())
 
-  const signer = await provider.getSigner()
+    let transaction
 
-  transaction = await academicCreds.connect(signer).issueCredential(
-    toAddress, credAddress, uri)
+    const signer = await provider.getSigner()
 
-  await transaction.wait()
+    transaction = await academicCreds.connect(signer).issueCredential(
+      toAddress, credAddress, uri)
 
+    await transaction.wait()
+
+    dispatch(issueSuccess(transaction.hash))
+
+  } catch (error) {
+    dispatch(issueFail())
+  }
 }
 
 // ----------------------------------------------------------------------------
