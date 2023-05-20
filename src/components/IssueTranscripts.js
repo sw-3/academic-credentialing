@@ -4,19 +4,13 @@ import Card from 'react-bootstrap/Card'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
-import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Tabs from './Tabs'
 
 import {
-  loadProvider,
-  loadNetwork,
-  loadCredentials,
-  loadOwnedTranscripts,
-  loadAcademicCreds
+  loadOwnedTranscripts
 } from '../store/interactions'
 
 const logoColor = '#0f2a87'
@@ -28,27 +22,29 @@ const IssueTranscripts = () => {
   const [uri, setUri] = useState('')
   const [isWaiting, setIsWaiting] = useState(false)
 
+  // fetch data from Redux state
+  const provider = useSelector(state => state.provider.connection)
   const account = useSelector(state => state.provider.account)
+  const credentials = useSelector(state => state.credentials.contracts)
+  const transcriptCred = credentials[0]
+  const academicCreds = useSelector(state => state.academicCreds.contract)
   const isSchoolAccount = useSelector(state => state.academicCreds.isSchool)
 
   const issueTranscriptHandler = async (e) => {
+    e.preventDefault()
+
     try {
       if (address !== '' && uri !== '')
       {
-        // get signer and contract
-        const provider = await loadProvider(dispatch)
+        // get signer
         const signer = await provider.getSigner()
-        const chainId = await loadNetwork(provider, dispatch)
-        const credentials = await loadCredentials(provider, chainId, dispatch)
-        const transcriptCred = credentials[0]
-        const academicCreds = await loadAcademicCreds(provider, chainId, dispatch)
 
         // issue transcript token to wallet address
         const transaction = await academicCreds.connect(signer).issueCredential(
                       address, transcriptCred.address, uri)
         await transaction.wait()
 
-        // reload the owned transcripts into Redux
+        // reset the owned transcripts list in Redux
         await loadOwnedTranscripts(transcriptCred, account, dispatch)
       }
     } catch {

@@ -13,9 +13,6 @@ import dayjs from 'dayjs'
 import Tabs from './Tabs'
 
 import {
-  loadProvider,
-  loadNetwork,
-  loadCredentials,
   loadOwnedDiplomas
 } from '../store/interactions'
 
@@ -27,20 +24,22 @@ const ViewDiplomas = () => {
   const [address, setAddress] = useState("")
   const [isWaiting, setIsWaiting] = useState(false)
 
+  // fetch data from Redux state
+  const provider = useSelector(state => state.provider.connection)
   const account = useSelector(state => state.provider.account)
+  const credentials = useSelector(state => state.credentials.contracts)
+  const diplomaCred = credentials[1]
   ownedDiplomas = useSelector(state => state.academicCreds.ownedDiplomas)
   count = ownedDiplomas.length
 
+  // function to handle an entered wallet address
   const addressHandler = async (e) => {
     e.preventDefault()
 
     try {
       if (address !== "")
       {
-        const provider = await loadProvider(dispatch)
-        const chainId = await loadNetwork(provider, dispatch)
-        const credentials = await loadCredentials(provider, chainId, dispatch)
-        const diplomaCred = credentials[1]
+        // load the Diplomas owned by the address entered
         await loadOwnedDiplomas(diplomaCred, address, dispatch)
       }
       else
@@ -54,18 +53,14 @@ const ViewDiplomas = () => {
 
   const deleteHandler = async (_diplomaId) => {
     try {
-      // get signer and contract
-      const provider = await loadProvider(dispatch)
+      // get signer
       const signer = await provider.getSigner()
-      const chainId = await loadNetwork(provider, dispatch)
-      const credentials = await loadCredentials(provider, chainId, dispatch)
-      const diplomaCred = credentials[1]
 
-      // burn the token to delete it
+      // burn the diploma token to delete it
       const transaction = await diplomaCred.connect(signer).burn(_diplomaId)
       await transaction.wait()
 
-      // reload the owned transcripts into Redux
+      // reload the owned diplomas into Redux
       await loadOwnedDiplomas(diplomaCred, account, dispatch)
 
     } catch {

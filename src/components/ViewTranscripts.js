@@ -13,9 +13,6 @@ import dayjs from 'dayjs'
 import Tabs from './Tabs'
 
 import {
-  loadProvider,
-  loadNetwork,
-  loadCredentials,
   loadOwnedTranscripts
 } from '../store/interactions'
 
@@ -27,20 +24,22 @@ const ViewTranscripts = () => {
   const [address, setAddress] = useState("")
   const [isWaiting, setIsWaiting] = useState(false)
 
+  // fetch data from Redux state
+  const provider = useSelector(state => state.provider.connection)
   const account = useSelector(state => state.provider.account)
+  const credentials = useSelector(state => state.credentials.contracts)
+  const transcriptCred = credentials[0]
   ownedTranscripts = useSelector(state => state.academicCreds.ownedTranscripts)
   count = ownedTranscripts.length
 
+  // function to handle an entered wallet address
   const addressHandler = async (e) => {
     e.preventDefault()
 
     try {
       if (address !== "")
       {
-        const provider = await loadProvider(dispatch)
-        const chainId = await loadNetwork(provider, dispatch)
-        const credentials = await loadCredentials(provider, chainId, dispatch)
-        const transcriptCred = credentials[0]
+        // load the transcripts owned by the address entered
         await loadOwnedTranscripts(transcriptCred, address, dispatch)
       }
       else
@@ -52,16 +51,13 @@ const ViewTranscripts = () => {
     }
   }
 
+  // function to handle a delete transcript button press
   const deleteHandler = async (_transcriptId) => {
     try {
-      // get signer and contract
-      const provider = await loadProvider(dispatch)
+      // get signer
       const signer = await provider.getSigner()
-      const chainId = await loadNetwork(provider, dispatch)
-      const credentials = await loadCredentials(provider, chainId, dispatch)
-      const transcriptCred = credentials[0]
 
-      // burn the token to delete it
+      // burn the transcript token to delete it
       const transaction = await transcriptCred.connect(signer).burn(_transcriptId)
       await transaction.wait()
 
