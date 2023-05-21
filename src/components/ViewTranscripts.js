@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 
 import Tabs from './Tabs'
+import Alert from './Alert'
 
 import {
   loadOwnedCreds,
@@ -23,7 +24,7 @@ const ViewTranscripts = () => {
   let ownedTranscripts, count
   const dispatch = useDispatch()
   const [address, setAddress] = useState("")
-  const [isWaiting, setIsWaiting] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
 
   // fetch data from Redux state
   const provider = useSelector(state => state.provider.connection)
@@ -32,6 +33,9 @@ const ViewTranscripts = () => {
   const transcriptCred = credentials[0]
   ownedTranscripts = useSelector(state => state.academicCreds.ownedTranscripts)
   count = ownedTranscripts.length
+  const isDeleting = useSelector(state => state.academicCreds.deleting.isDeleting)
+  const isSuccess = useSelector(state => state.academicCreds.deleting.isSuccess)
+  const transactionHash = useSelector(state => state.academicCreds.deleting.transactionHash)
 
   // function to handle an entered wallet address
   const addressHandler = async (e) => {
@@ -52,16 +56,15 @@ const ViewTranscripts = () => {
 
   // function to handle a delete transcript button press
   const deleteHandler = async (_transcriptId) => {
-    try {
 
-      await deleteCred(provider, transcriptCred, _transcriptId)
+    setShowAlert(false)
 
-      // reload the owned transcripts into Redux
-      await loadOwnedCreds(transcriptCred, account, dispatch)
+    await deleteCred(provider, transcriptCred, _transcriptId, dispatch)
 
-    } catch {
-      window.alert('User rejected or transaction reverted')
-    }
+    // reload the owned transcripts into Redux
+    await loadOwnedCreds(transcriptCred, account, dispatch)
+
+    setShowAlert(true)
   }
 
   return (
@@ -110,14 +113,20 @@ const ViewTranscripts = () => {
                           <td>{transcript.semester}</td>
                           <td><a href={transcript.credential_image} target='_blank'>PDF</a></td>
                           <td>
-                            {(account === transcript.recipient_account) && (
-                              <Button
-                                variant='danger'
-                                style={{ width: '100%' }}
-                                onClick={() => deleteHandler(transcript.tokenId)}
-                              >
-                                Delete
-                              </Button>
+                            {account === transcript.recipient_account ? (
+                              isDeleting ? (
+                                <Spinner animation='border' style={{ display: 'block', margin: '0 auto' }} />
+                              ) : (
+                                <Button
+                                  variant='danger'
+                                  style={{ width: '100%' }}
+                                  onClick={() => deleteHandler(transcript.tokenId)}
+                                >
+                                  Delete
+                                </Button>
+                              )
+                            ) : (
+                              <></>
                             )}
                           </td>
                         </tr>
@@ -146,7 +155,7 @@ const ViewTranscripts = () => {
                   <Form.Control type='address' placeholder='0x...' onChange={(e) => setAddress(e.target.value)}/>
                 </Col>
                 <Col className='text-center'>
-                  {isWaiting ? (
+                  {isDeleting ? (
                     <Spinner annimation='border' />
                   ): (
                     <Button variant='primary' type='submit' style={{ width: '100%' }}>
@@ -162,6 +171,35 @@ const ViewTranscripts = () => {
         )}
 
       </Card>
+
+      {isDeleting ? (
+        <Alert
+          message={'Delete Pending...'}
+          transactionHash={null}
+          variant={'info'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : isSuccess && showAlert ? (
+        <Alert
+          message={'Succes!'}
+          transactionHash={transactionHash}
+          variant={'success'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : !isSuccess && showAlert ? (
+        <Alert
+          message={'Failed!'}
+          transactionHash={null}
+          variant={'danger'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : (
+        <></>
+      )}
+
     </div>
   )
 }

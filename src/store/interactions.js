@@ -18,7 +18,10 @@ import {
   setOwnedDiplomas,
   issueRequest,
   issueSuccess,
-  issueFail
+  issueFail,
+  deleteRequest,
+  deleteSuccess,
+  deleteFail
 } from './reducers/academicCreds'
 
 import CREDENTIAL_ABI from '../abis/Credential.json'
@@ -148,14 +151,22 @@ export const issueCred =
 // ----------------------------------------------------------------------------
 // Delete a credential from the blockchain
 // ----------------------------------------------------------------------------
-export const deleteCred = async (provider, credential, credId) => {
+export const deleteCred = async (provider, credential, credId, dispatch) => {
 
-  let transaction
+  try {
+    dispatch(deleteRequest())
 
-  const signer = await provider.getSigner()
+    let transaction
 
-  // burn the token to delete it
-  transaction = await credential.connect(signer).burn(credId)
-  await transaction.wait()
+    const signer = await provider.getSigner()
 
+    // burn the token to delete it
+    transaction = await credential.connect(signer).burn(credId)
+    await transaction.wait()
+
+    dispatch(deleteSuccess(transaction.hash))
+
+  } catch (error) {
+    dispatch(deleteFail())
+  }
 }

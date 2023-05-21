@@ -11,6 +11,11 @@ export const academicCreds = createSlice({
       isIssuing: false,
       isSuccess: false,
       transactionHash: null
+    },
+    deleting: {
+      isDeleting: false,
+      isSuccess: false,
+      transactionHash: null
     }
   },
   reducers: {
@@ -40,6 +45,21 @@ export const academicCreds = createSlice({
       state.issuing.isIssuing = false
       state.issuing.isSuccess = false
       state.issuing.transactionHash = null
+    },
+    deleteRequest: (state, action) => {
+      state.deleting.isDeleting = true
+      state.deleting.isSuccess = false
+      state.deleting.transactionHash = null
+    },
+    deleteSuccess: (state, action) => {
+      state.deleting.isDeleting = false
+      state.deleting.isSuccess = true
+      state.deleting.transactionHash = action.payload
+    },
+    deleteFail: (state, action) => {
+      state.deleting.isDeleting = false
+      state.deleting.isSuccess = false
+      state.deleting.transactionHash = null
     }
   }
 })
@@ -51,7 +71,10 @@ export const {
   setOwnedDiplomas,
   issueRequest,
   issueSuccess,
-  issueFail
+  issueFail,
+  deleteRequest,
+  deleteSuccess,
+  deleteFail
 } = academicCreds.actions
 
 export default academicCreds.reducer;

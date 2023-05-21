@@ -22,7 +22,6 @@ const IssueTranscripts = () => {
   const dispatch = useDispatch()
   const [address, setAddress] = useState('')
   const [uri, setUri] = useState('')
-  const [isWaiting, setIsWaiting] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
 
   // fetch data from Redux state

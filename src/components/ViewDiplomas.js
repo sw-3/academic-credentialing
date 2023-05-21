@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 
 import Tabs from './Tabs'
+import Alert from './Alert'
 
 import {
   loadOwnedCreds,
@@ -23,7 +24,7 @@ const ViewDiplomas = () => {
   let ownedDiplomas, count
   const dispatch = useDispatch()
   const [address, setAddress] = useState("")
-  const [isWaiting, setIsWaiting] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
 
   // fetch data from Redux state
   const provider = useSelector(state => state.provider.connection)
@@ -32,6 +33,9 @@ const ViewDiplomas = () => {
   const diplomaCred = credentials[1]
   ownedDiplomas = useSelector(state => state.academicCreds.ownedDiplomas)
   count = ownedDiplomas.length
+  const isDeleting = useSelector(state => state.academicCreds.deleting.isDeleting)
+  const isSuccess = useSelector(state => state.academicCreds.deleting.isSuccess)
+  const transactionHash = useSelector(state => state.academicCreds.deleting.transactionHash)
 
   // function to handle an entered wallet address
   const addressHandler = async (e) => {
@@ -50,17 +54,17 @@ const ViewDiplomas = () => {
     }
   }
 
+  // function to handle a delete diploma button press
   const deleteHandler = async (_diplomaId) => {
-    try {
 
-      await deleteCred(provider, diplomaCred, _diplomaId)
+    setShowAlert(false)
 
-      // reload the owned diplomas into Redux
-      await loadOwnedCreds(diplomaCred, account, dispatch)
+    await deleteCred(provider, diplomaCred, _diplomaId, dispatch)
 
-    } catch {
-      window.alert('User rejected or transaction reverted')
-    }
+    // reload the owned diplomas into Redux
+    await loadOwnedCreds(diplomaCred, account, dispatch)
+
+    setShowAlert(true)
   }
 
   return (
@@ -109,14 +113,20 @@ const ViewDiplomas = () => {
                           <td>{diploma.degree_subject}</td>
                           <td><a href={diploma.credential_image} target='_blank'>PDF</a></td>
                           <td>
-                            {(account === diploma.recipient_account) && (
-                              <Button
-                                variant='danger'
-                                style={{ width: '100%' }}
-                                onClick={() => deleteHandler(diploma.tokenId)}
-                              >
-                                Delete
-                              </Button>
+                            {(account === diploma.recipient_account) ? (
+                              isDeleting ? (
+                                <Spinner animation='border' style={{ display: 'block', margin: '0 auto' }} />
+                              ) : (
+                                <Button
+                                  variant='danger'
+                                  style={{ width: '100%' }}
+                                  onClick={() => deleteHandler(diploma.tokenId)}
+                                >
+                                  Delete
+                                </Button>
+                              )
+                            ) : (
+                              <></>
                             )}
                           </td>
                         </tr>
@@ -145,7 +155,7 @@ const ViewDiplomas = () => {
                   <Form.Control type='address' placeholder='0x...' onChange={(e) => setAddress(e.target.value)}/>
                 </Col>
                 <Col className='text-center'>
-                  {isWaiting ? (
+                  {isDeleting ? (
                     <Spinner annimation='border' />
                   ): (
                     <Button variant='primary' type='submit' style={{ width: '100%' }}>
@@ -161,6 +171,35 @@ const ViewDiplomas = () => {
         )}
 
       </Card>
+
+      {isDeleting ? (
+        <Alert
+          message={'Delete Pending...'}
+          transactionHash={null}
+          variant={'info'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : isSuccess && showAlert ? (
+        <Alert
+          message={'Succes!'}
+          transactionHash={transactionHash}
+          variant={'success'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : !isSuccess && showAlert ? (
+        <Alert
+          message={'Failed!'}
+          transactionHash={null}
+          variant={'danger'}
+          setShowAlert={setShowAlert}
+        />
+
+      ) : (
+        <></>
+      )}
+
     </div>
   )
 }
