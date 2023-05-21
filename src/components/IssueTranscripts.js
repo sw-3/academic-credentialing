@@ -41,28 +41,24 @@ const IssueTranscripts = () => {
 
     setShowAlert(false)
 
-    try {
-      if (address !== '' && uri !== '')
-      {
-        // issue transcript token to wallet address
-        await issueCred(
-          provider,
-          academicCreds,
-          address,
-          transcriptCred.address,
-          uri,
-          dispatch)
+    if (address !== '' && uri !== '')
+    {
+      // issue transcript token to wallet address
+      await issueCred(
+        provider,
+        academicCreds,
+        address,
+        transcriptCred.address,
+        uri,
+        dispatch)
 
-        // reset the owned transcripts list in Redux
-        await loadOwnedCreds(transcriptCred, account, dispatch)
+      // reset the owned transcripts list in Redux
+      await loadOwnedCreds(transcriptCred, account, dispatch)
 
-        setShowAlert(true)
+      setShowAlert(true)
 
-      } else {
-        window.alert('Enter the metadata URI and a wallet address')
-      }
-    } catch {
-      window.alert('User rejected or transaction reverted')
+    } else {
+      window.alert('Enter the metadata URI and a wallet address')
     }
   }
 

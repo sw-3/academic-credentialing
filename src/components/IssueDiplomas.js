@@ -41,28 +41,24 @@ const IssueDiplomas = () => {
 
     setShowAlert(false)
 
-    try {
-      if (address !== '' && uri !== '')
-      {
-        // issue diploma token to wallet address
-        await issueCred(
-          provider,
-          academicCreds,
-          address,
-          diplomaCred.address,
-          uri,
-          dispatch)
+    if (address !== '' && uri !== '')
+    {
+      // issue diploma token to wallet address
+      await issueCred(
+        provider,
+        academicCreds,
+        address,
+        diplomaCred.address,
+        uri,
+        dispatch)
 
-        // reset the owned diplomas list in Redux
-        await loadOwnedCreds(diplomaCred, account, dispatch)
+      // reset the owned diplomas list in Redux
+      await loadOwnedCreds(diplomaCred, account, dispatch)
 
-        setShowAlert(true)
+      setShowAlert(true)
 
-      } else {
-        window.alert('Enter the metadata URI and a wallet address')
-      }
-    } catch {
-      window.alert('User rejected or transaction reverted')
+    } else {
+      window.alert('Enter the metadata URI and a wallet address')
     }
   }
 
