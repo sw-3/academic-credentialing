@@ -1,6 +1,6 @@
 ## NOTE: this readme is still a WIP, and will change frequently...
 
-# Acedemic Credentials Issued on a Blockchain
+# Acedemic Credentials Issued on Blockchain
 
 This project is a proof-of-concept for a better way to issue and manage official academic transcripts and diplomas.
 
