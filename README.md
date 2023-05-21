@@ -28,6 +28,12 @@ A Credential can be deleted by its owner, via the portal interface. This is acco
 
 This is a Hardhat/Solidity project running React.js on the front end. It was bootstrapped with create-react-app.
 
-Pull it down and from the main directory run:
+### Prerequisites
+- node.js:  This project was built with v 9.6.2.  Run `npm -v` to see your version of node.
+- hardhat:  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
 
+### Steps
+1. Clone the repo onto your local machine, and cd to the main directory.
+2. Run `npm install`
+3. Run `npx hardhat test` to compile the smart contracts and run their tests. If things are working, you should see 24 passing tests.
 
