@@ -24,16 +24,36 @@ The issuing of "fake" credentials is prevented in 2 ways. First, only white-list
 A Credential can be deleted by its owner, via the portal interface. This is accomplished throught the normal burn function provided by the OpenZeppelin NFT contract, and allows the owner to delete old un-needed credentials out of their wallet.
 
 
-## Installation
+## Install and Run Locally - beware this section is "in progress"!!!
 
 This is a Hardhat/Solidity project running React.js on the front end. It was bootstrapped with create-react-app.
 
 ### Prerequisites
-- node.js:  This project was built with v 9.6.2.  Run `npm -v` to see your version of node.
+- node.js v16.X:  This project was built with v 16.14.2.  Run `node -v` to see your version of node.
+- nvm:  This project was built with v 0.39.3.  Run `nvm -v` to see your version of nvm.
+- npm:  This project was built with v 9.6.2.  Run `npm -v` to see your version of npm.
 - hardhat:  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
 
-### Steps
-1. Clone the repo onto your local machine, and cd to the main directory.
-2. Run `npm install`
-3. Run `npx hardhat test` to compile the smart contracts and run their tests. If things are working, you should see 24 passing tests.
+### Install and Validate
+1. In a terminal session:  Clone the repo onto your local machine, and cd to the main directory.
+2. On the command line, Enter `npm install`
+3. Enter `npx hardhat test` to compile the smart contracts and run their tests. If things are working, you should see 24 passing tests.
+
+### Run the POC Locally
+1. In a terminal session:  Enter `npx hardhat node` to launch a blockchain node on your computer
+2. In a 2nd terminal session:  Enter `npx hardhat run --network localhost ./scripts/deploy.js`
+
+After the above, you should see output for 3 contracts deployed, and a configuration step for the 2 Credential contracts.  In the terminal window that is running the blockchain node, you should see that the deploy/configure transactions ran successfully.
+
+Your blockchain is now running locally with the Academic Credentials deployed!
+
+3. Back in the 2nd terminal:  Enter `npx hardhat run --network localhost ./scripts/seed.js`
+
+You should see output like this:
+`Registering 2 schools...
+   Great State University registered successfully: 0x...
+   Great Institute of Technology registered successfully: 0x...`
+Note the account addresses, these are the 2 school accounts which can issue transcripts and diplomas to other accounts.
+
+
 
