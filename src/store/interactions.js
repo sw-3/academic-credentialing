@@ -14,6 +14,7 @@ import {
 import {
   setContract,
   setIsSchool,
+  setSchoolName,
   setOwnedTranscripts,
   setOwnedDiplomas,
   issueRequest,
@@ -86,11 +87,16 @@ export const loadAcademicCreds = async (provider, chainId, dispatch) => {
 }
 
 // ----------------------------------------------------------------------------
-// Load Registered School Indicator
+// Load Registered School Indicator and School Name
 // ----------------------------------------------------------------------------
 export const loadIsSchool = async (academicCreds, account, dispatch) => {
   const isSchool = await academicCreds.isSchool(account)
   dispatch(setIsSchool(isSchool))
+}
+
+export const loadSchoolName = async (academicCreds, account, dispatch) => {
+  const schoolName = await academicCreds.registeredSchools(account)
+  dispatch(setSchoolName(schoolName))
 }
 
 // ----------------------------------------------------------------------------

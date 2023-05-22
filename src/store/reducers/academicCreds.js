@@ -5,6 +5,7 @@ export const academicCreds = createSlice({
   initialState: {
     contract: null,
     isSchool: false,
+    schoolName: '',
     ownedTranscripts: [],
     ownedDiplomas: [],
     issuing: {
@@ -24,6 +25,9 @@ export const academicCreds = createSlice({
     },
     setIsSchool: (state, action) => {
       state.isSchool = action.payload
+    },
+    setSchoolName: (state, action) => {
+      state.schoolName = action.payload
     },
     setOwnedTranscripts: (state, action) => {
       state.ownedTranscripts = action.payload
@@ -67,6 +71,7 @@ export const academicCreds = createSlice({
 export const {
   setContract,
   setIsSchool,
+  setSchoolName,
   setOwnedTranscripts,
   setOwnedDiplomas,
   issueRequest,

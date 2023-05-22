@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import {
   loadAccount,
   loadIsSchool,
+  loadSchoolName,
   loadOwnedCreds
 } from '../store/interactions'
 
@@ -28,6 +29,7 @@ const Navigation = () => {
 
     // load the 'isSchool' indicator for this account
     await loadIsSchool(academicCreds, account, dispatch)
+    await loadSchoolName(academicCreds, account, dispatch)
 
     // load the credentials owned by the account
     await loadOwnedCreds(credentials[0], account, dispatch)

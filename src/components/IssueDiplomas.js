@@ -31,6 +31,7 @@ const IssueDiplomas = () => {
   const diplomaCred = credentials[1]
   const academicCreds = useSelector(state => state.academicCreds.contract)
   const isSchoolAccount = useSelector(state => state.academicCreds.isSchool)
+  const schoolName = useSelector(state => state.academicCreds.schoolName)
   const isIssuing = useSelector(state => state.academicCreds.issuing.isIssuing)
   const isSuccess = useSelector(state => state.academicCreds.issuing.isSuccess)
   const transactionHash = useSelector(state => state.academicCreds.issuing.transactionHash)
@@ -73,40 +74,43 @@ const IssueDiplomas = () => {
         <Card.Body>
           {account ? (
             isSchoolAccount ? (
-              <Form onSubmit={issueDiplomaHandler} style={{ maxWidth: '450px', margin: '30px auto'}}>
-                <Row className='my-2'>
-                  <div className='d-flex justify-content-between'>
-                    <Form.Label>Enter URI location of Diploma metadata:</Form.Label>
-                  </div>
-                  <Form.Control
-                    type='string'
-                    placeholder='https://...'
-                    onChange={(e) => setUri(e.target.value)}
-                  />
-                </Row>
+              <>
+                <Card.Title className='text-center my-3'>Issuing Diplomas as: {schoolName}.</Card.Title>
+                <Form onSubmit={issueDiplomaHandler} style={{ maxWidth: '450px', margin: '30px auto'}}>
+                  <Row className='my-2'>
+                    <div className='d-flex justify-content-between'>
+                      <Form.Label>Enter URI location of Diploma metadata:</Form.Label>
+                    </div>
+                    <Form.Control
+                      type='string'
+                      placeholder='https://...'
+                      onChange={(e) => setUri(e.target.value)}
+                    />
+                  </Row>
 
-                <Row className='my-4'>
-                  <div className='d-flex justify-content-between'>
-                    <Form.Label>Enter wallet address to send Diploma:</Form.Label>
-                  </div>
-                  <Form.Control
-                    type='address'
-                    placeholder='0x...'
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </Row>
+                  <Row className='my-4'>
+                    <div className='d-flex justify-content-between'>
+                      <Form.Label>Enter wallet address to send Diploma:</Form.Label>
+                    </div>
+                    <Form.Control
+                      type='address'
+                      placeholder='0x...'
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </Row>
 
-                <Row className='my-5'>
-                  {isIssuing ? (
-                    <Spinner animation='border' style={{ display: 'block', margin: '0 auto' }} />
-                  ) : (
-                    <Button type='submit' style={{ maxWidth: '250px', margin: '0 auto' }}>
-                      <strong>Issue Diploma</strong>
-                    </Button>
-                  )}
-                </Row>
+                  <Row className='my-5'>
+                    {isIssuing ? (
+                      <Spinner animation='border' style={{ display: 'block', margin: '0 auto' }} />
+                    ) : (
+                      <Button type='submit' style={{ maxWidth: '250px', margin: '0 auto' }}>
+                        <strong>Issue Diploma</strong>
+                      </Button>
+                    )}
+                  </Row>
 
-              </Form>
+                </Form>
+              </>
             ) : (
               <div>
                 <Card.Title className='text-center my-3'>Only registered accounts can issue diplomas.</Card.Title>
