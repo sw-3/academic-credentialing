@@ -2,12 +2,12 @@
   "credential": "Transcript",
   "name": "TSCRP_00002",
   "description": "This is an official college transcript.",
-  "date": 1463508000,
+  "date": 1432058400,
   "issuer": "Great State University",
   "issuer_account": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
   "recipient": "Some J. Student",
   "recipient_account": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-  "credential_image": "http://bafybeibrjw6geq2wgbhx4coce5uabcz4k5xngyrkonr2ldf2vt3geqyjnm.ipfs.localhost:8080/",
-  "school_year": "2015-2016",
+  "credential_image": "http://bafybeife3xyi54364lrdhhhfb5xga5j7i6npsemnqjllfwzzoywcnz3f5a.ipfs.localhost:8080/",
+  "school_year": "2014-2015",
   "semester": "Spring"
 }

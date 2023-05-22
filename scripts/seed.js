@@ -16,8 +16,6 @@ async function main() {
   const school1 = accounts[1]
   const school2 = accounts[2]
   const student1 = accounts[3]
-  const student2 = accounts[4]
-  const student3 = accounts[5]
 
   const { chainId } = await ethers.provider.getNetwork()
 
@@ -59,35 +57,42 @@ async function main() {
   } else {
     console.log(`   Registration of school 2 failed.\n`)
   }
-/*
-  console.log(`\nIssuing 2 Transcripts...`)
 
-//  const URI1 = "https://ipfs.io/ipfs/QmTtYjAyLaznJCHjEyu3fE45b6gkb5pNmc55HbCQJ22EGn?filename=tscrp_00001.json";
-  let URI1 = "http://bafybeidg3dbneqspndqmp75st32vsmcqeswoypvelijltmbfkwy52d6oxq.ipfs.localhost:8080/";
+  console.log(`\nIssuing 4 Transcripts...`)
+
+  let URI1 = "http://bafybeigptdeyvceiftxjtm27w5ifo6jzjni7d56cnqarq6c2vwghwb2s7u.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school1).issueCredential(
                     student1.address, transcriptCred.address, URI1)
   await transaction.wait()
-//  const URI2 = "https://ipfs.io/ipfs/QmbuyqceNYEqU7k6cdrfdxkMzkX4rujP9yov1Pzw91emmo?filename=tscrp_00002.json";
-  let URI2 = "http://bafybeiers4kgihd5jefnyipgfepsiknzpfx3d7d3u6viwshx2yxuq7xhye.ipfs.localhost:8080/";
+
+  let URI2 = "http://bafybeifphaorkxx5rua3tfv5aotjwljtnhb4u4sa6mbeqo4f2ocym54jfq.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school1).issueCredential(
                     student1.address, transcriptCred.address, URI2)
   await transaction.wait()
 
+  let URI3 = "http://bafybeiccgw7uplj7el6wnwfkjyqxwhb3nn42limp6oxzrx7b2akr736voq.ipfs.localhost:8080/";
+  transaction = await academicCreds.connect(school1).issueCredential(
+                    student1.address, transcriptCred.address, URI3)
+  await transaction.wait()
+
+  let URI4 = "http://bafybeieeaudzkzzrhw3jghqiwzs2axesjjtcfmdyqmgjxlkp7nnab6dgnm.ipfs.localhost:8080/";
+  transaction = await academicCreds.connect(school1).issueCredential(
+                    student1.address, transcriptCred.address, URI4)
+  await transaction.wait()
+
   let balance = await transcriptCred.balanceOf(student1.address)
-  if (balance == 2) {
-    console.log(`   Issued 2 Transcripts to: ${student1.address}`)
+  if (balance == 4) {
+    console.log(`   Issued 4 Transcripts to: ${student1.address}`)
   } else {
     console.log(`   Failed to issue transcripts; balance = ${balance}\n`)
   }
 
   console.log(`\nIssuing 2 Diplomas...`)
 
-//  const URI1 = "https://ipfs.io/ipfs/QmTtYjAyLaznJCHjEyu3fE45b6gkb5pNmc55HbCQJ22EGn?filename=tscrp_00001.json";
   URI1 = "http://bafybeihlrlknxdec75grfrjcnliuta6t62xye6zehejmx5g5aoikdqngbe.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school1).issueCredential(
                     student1.address, diplomaCred.address, URI1)
   await transaction.wait()
-//  const URI2 = "https://ipfs.io/ipfs/QmbuyqceNYEqU7k6cdrfdxkMzkX4rujP9yov1Pzw91emmo?filename=tscrp_00002.json";
   URI2 = "http://bafybeicm43jt7jieyknlvqxlztdeomw3vtyapbvp4n4auxyvf5hc5dtoxe.ipfs.localhost:8080/";
   transaction = await academicCreds.connect(school2).issueCredential(
                     student1.address, diplomaCred.address, URI2)
@@ -99,7 +104,7 @@ async function main() {
   } else {
     console.log(`   Failed to issue diplomas; balance = ${balance}\n`)
   }
-*/
+
   console.log(`\n-----     Done     -----\n\n\n`)
 }
 
