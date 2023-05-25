@@ -21,7 +21,7 @@ A school issues credentials as NFT tokens, via the web portal.  The Credential t
 
 The issuing of "fake" credentials is prevented in 2 ways. First, only white-listed school accounts (registered with the AcademicCreds smart contract) can issue credentials on the contract. Second, the Credential contract's mint function is overridden, to only allow the AcademicCreds smart contract address to call it. And because data on a blockchain is immutable, a properly issued transcript cannot be modified later.
 
-A Credential can be deleted by its owner, via the portal interface. This is accomplished throught the normal burn function provided by the OpenZeppelin NFT contract, and allows the owner to delete old un-needed credentials out of their wallet.
+A Credential can be deleted by its owner, via the portal interface. This is accomplished throught the normal burn function provided by the OpenZeppelin NFT contract, and allows the owner to delete old un-needed credentials out of their wallet and off the blockchain.
 
 
 ## Install and Run Locally - beware this section is "in progress"!!!
@@ -29,10 +29,11 @@ A Credential can be deleted by its owner, via the portal interface. This is acco
 This is a Hardhat/Solidity project running React.js on the front end. It was bootstrapped with create-react-app.
 
 ### Prerequisites
-- node.js v16.X:  This project was built with v 16.14.2.  Run `node -v` to see your version of node.
-- nvm:  This project was built with v 0.39.3.  Run `nvm -v` to see your version of nvm.
-- npm:  This project was built with v 9.6.2.  Run `npm -v` to see your version of npm.
-- hardhat:  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
+- **node.js v16.X:**  This project was built with v 16.14.2.  Run `node -v` to see your version of node.
+- **nvm:**  This project was built with v 0.39.3.  Run `nvm -v` to see your version of nvm.
+- **npm:**  This project was built with v 9.6.2.  Run `npm -v` to see your version of npm.
+- **hardhat:**  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
+- **solidity v0.8.18:**  This should be set in the hardhat.config.js file.
 
 ### Install and Validate
 1. In a terminal session:  Clone the repo onto your local machine, and cd to the main directory.
