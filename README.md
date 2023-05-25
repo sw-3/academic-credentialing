@@ -35,10 +35,12 @@ This is a Hardhat/Solidity project running React.js on the front end. It was boo
 - **hardhat:**  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
 - **solidity v0.8.18:**  This should be set in the hardhat.config.js file.
 
-### Install and Validate
+### Install and Validate Smart Contracts
 1. In a terminal session:  Clone the repo onto your local machine, and cd to the main directory.
 2. On the command line, Enter `npm install`
-3. Enter `npx hardhat test` to compile the smart contracts and run their tests. If things are working, you should see 24 passing tests.
+3. Enter `npx hardhat test` to compile the smart contracts and run their tests.
+
+If things are working, you should see 24 passing tests, for AcademicCreds & Credential contracts.
 
 ### Run the POC Locally
 1. In a terminal session:  Enter `npx hardhat node` to launch a blockchain node on your computer
@@ -46,7 +48,7 @@ This is a Hardhat/Solidity project running React.js on the front end. It was boo
 
 After the above, you should see output for 3 contracts deployed, and a configuration step for the 2 Credential contracts.  In the terminal window that is running the blockchain node, you should see that the deploy/configure transactions ran successfully.
 
-Your blockchain is now running locally with the Academic Credentials deployed!
+Your blockchain is now running locally with the Academic Credentials contracts deployed!
 
 3. Back in the 2nd terminal:  Enter `npx hardhat run --network localhost ./scripts/seed.js`
 

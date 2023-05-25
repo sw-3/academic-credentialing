@@ -74,13 +74,20 @@ async function main() {
 ** 2) add the URI from step 1 to the .json metadata for the credential as the
 **    "credential_image" value
 ** 3) store the .json metadata in IPFS and get the URI of the metadata
-** 4) set the URI value below to the URI from step 3
+** 4) set a URI value in the script below to the URI from step 3
 **
-** Alternatively, you can comment out the issue of transcripts & diplomas
-** below, and issue them via the school accounts connected to the frontend.
+** Alternatively, you can comment out the section below, and issue transcripts
+** and diplomas via the 2 Hardhat school accounts connected to the frontend.
 ** (You still need to store the metadata/PDF on IPFS first, step 1-3 above)
 **
 ******************************************************************************/
+
+/*****************************************************************************
+**                                                                          **
+**      UNCOMMENT THIS SECTION WHEN URIs ARE VALID IN YOUR ENVIRONMENT      **
+**                                                                          **
+******************************************************************************
+
   console.log(`\nIssuing 3 Transcripts...`)
 
   let URI1 = "http://bafybeifphaorkxx5rua3tfv5aotjwljtnhb4u4sa6mbeqo4f2ocym54jfq.ipfs.localhost:8080/";
@@ -122,6 +129,8 @@ async function main() {
   } else {
     console.log(`   Failed to issue diplomas; balance = ${balance}\n`)
   }
+
+******************************************************************************/
 
   console.log(`\n-----     Done     -----\n\n\n`)
 }
