@@ -1,9 +1,20 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
+/* deploy.js
+**
+** Academic Credentials deployment script
+**
+** Deployment must follow this order:
+**
+**    1) Deploy the Credential contracts first
+**    2) Deploy the AcademicCreds contract
+**    3) Set the AcademicCreds deployed address in each Credential contract
+**
+** The above steps will ensure that only the AcademicCreds contract can "mint" new
+** credentials via the other contracts.
+**
+** You can run the script with `npx hardhat run --network localhost deploy.js`.
+** Hardhat will compile your contracts, add the HRE members to the global scope,
+** and execute the script.
+*/
 const hre = require("hardhat");
 
 async function main() {
@@ -26,7 +37,7 @@ async function main() {
   await academicCreds.deployed()
   console.log(`Acedemic Creds deployed to:   ${academicCreds.address}\n`)
 
-  // configure credential contracts with academicCreds address
+  // set academicCreds address in each credential contract
   console.log('\n-----\n')
   console.log('Configuring credentials contracts...\n')
   let transaction
@@ -40,7 +51,7 @@ async function main() {
   console.log('Done.\n')
 }
 
-// We recommend this pattern to be able to use async/await everywhere
+// Recommended pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
   console.error(error);
