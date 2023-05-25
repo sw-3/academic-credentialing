@@ -13,6 +13,7 @@
 
 # misc
 sw3_hardhat.config.js
+sw3_seed.js
 .DS_Store
 .env.local
 .env.development.local

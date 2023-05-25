@@ -23,6 +23,7 @@ import {
   deleteCred
 } from '../store/interactions'
 
+const config = require('../config.json')
 const logoColor = '#0f2a87'
 
 const ViewDiplomas = () => {
@@ -33,6 +34,7 @@ const ViewDiplomas = () => {
 
   // fetch data from Redux state
   const provider = useSelector(state => state.provider.connection)
+  const chainId = useSelector(state => state.provider.chainId)
   const account = useSelector(state => state.provider.account)
   const credentials = useSelector(state => state.credentials.contracts)
   const diplomaCred = credentials[1]
@@ -170,6 +172,18 @@ const ViewDiplomas = () => {
                 </Col>
               </Form.Group>
             </Form>
+
+            {chainId && (
+              config[chainId].demoStudent.address !== "" ? (
+                <div className='my-3' style={{ textAlign: 'center', color: logoColor }}>
+                  <p>Enter this wallet address to see <strong>demo student</strong> diplomas:</p>
+                  <p>{config[chainId].demoStudent.address}</p>
+                </div>
+              ) : (
+                <> </>
+              )
+            )}
+
           </>
         ) : (
           <div> </div>

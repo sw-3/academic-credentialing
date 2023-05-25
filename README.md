@@ -60,8 +60,8 @@ There are 2 example Diplomas, and 4 example Transcripts, included in these 2 dir
 - example_images/  contains the PDF files
 - example_metadata/ contains the related .json files
 
-These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs.
+These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs. *See the ./scripts/seed.js file for details on how to do this step.*
 
-See the ./scripts/seed.js file for details on how to do this step.
-You can use the IPFS Desktop app to run a local IPFS node for this step, and use the "Local Gateway" address for the URI to run everything locally.
+You can use the *IPFS Desktop* app to run a local IPFS node for this step, and use the "Local Gateway" address for the URI to run everything locally.
 
+### Launch The Front End
