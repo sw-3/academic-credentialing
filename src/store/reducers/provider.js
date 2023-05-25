@@ -1,3 +1,9 @@
+/* provider.js
+**
+** Defines initial state in Redux for data related to the blockchain connection,
+** and the actions to dispatch to write the data to the store.
+*******************************************************************************
+*/
 import { createSlice } from '@reduxjs/toolkit'
 
 export const provider = createSlice({

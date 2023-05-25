@@ -1,3 +1,8 @@
+/* ViewDiplomas.js
+**
+** Component to manage & display the View Diplomas tab.
+*******************************************************************************
+*/
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
@@ -111,7 +116,7 @@ const ViewDiplomas = () => {
                                     diploma.recipient_account.slice(38, 42)}</td>
                           <td>{diploma.degree_symbol}</td>
                           <td>{diploma.degree_subject}</td>
-                          <td><a href={diploma.credential_image} target='_blank'>PDF</a></td>
+                          <td><a href={diploma.credential_image} target='_blank' rel='noreferrer'>PDF</a></td>
                           <td>
                             {(account === diploma.recipient_account) ? (
                               isDeleting ? (
@@ -182,7 +187,7 @@ const ViewDiplomas = () => {
 
       ) : isSuccess && showAlert ? (
         <Alert
-          message={'Succes!'}
+          message={'Success!'}
           transactionHash={transactionHash}
           variant={'success'}
           setShowAlert={setShowAlert}

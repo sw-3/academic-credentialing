@@ -1,3 +1,8 @@
+/* store.js
+**
+** Configures the Redux store with the reducers.
+*******************************************************************************
+*/
 import { configureStore } from '@reduxjs/toolkit'
 
 import provider from './reducers/provider'

@@ -1,3 +1,8 @@
+/* interactions.js
+** 
+** Functions that allow the front end to interact with the blockchain
+*******************************************************************************
+*/
 import { ethers } from 'ethers'
 
 import {
@@ -29,6 +34,9 @@ import CREDENTIAL_ABI from '../abis/Credential.json'
 import ACADEMIC_CREDS_ABI from '../abis/AcademicCreds.json'
 import config from '../config.json'
 
+// ----------------------------------------------------------------------------
+// Load Connection information
+// ----------------------------------------------------------------------------
 export const loadProvider = (dispatch) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   dispatch(setProvider(provider))

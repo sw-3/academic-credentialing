@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react'
+/* App.js
+**
+** Main application component.
+** Loads blockchain data with every page refresh, and displays the other
+** page components.
+*******************************************************************************
+*/
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import { ethers } from 'ethers'
 
 // components
 import Navigation from './Navigation'
@@ -10,7 +16,6 @@ import ViewTranscripts from './ViewTranscripts'
 import ViewDiplomas from './ViewDiplomas'
 import IssueTranscripts from './IssueTranscripts'
 import IssueDiplomas from './IssueDiplomas'
-import Tabs from './Tabs'
 
 import {
   loadProvider,
@@ -68,7 +73,7 @@ function App() {
 
   useEffect(() => {
     loadBlockchainData()
-  }, []);
+  });
 
   return (
     <Container>

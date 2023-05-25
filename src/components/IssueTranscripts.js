@@ -1,3 +1,8 @@
+/* IssueTranscripts.js
+**
+** Component to manage & display the Issue Transcripts tab.
+*******************************************************************************
+*/
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
@@ -133,7 +138,7 @@ const IssueTranscripts = () => {
 
       ) : isSuccess && showAlert ? (
         <Alert
-          message={'Succes!'}
+          message={'Success!'}
           transactionHash={transactionHash}
           variant={'success'}
           setShowAlert={setShowAlert}

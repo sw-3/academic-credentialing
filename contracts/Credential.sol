@@ -4,6 +4,8 @@ pragma solidity ^0.8.9;
 // ----------------------------------------------------------------------------
 // Credential.sol
 //
+// A contract to manage a type of Academic Credential issued on the blockchain
+//
 // This contract inherits from openZeppelin's ERC721.sol and extensions, with
 // the following modifications:
 //
@@ -37,7 +39,7 @@ contract Credential is ERC721,
         )
         ERC721(_name, _symbol) {}
 
-    // modifier to enforce who can mint
+    // modifier to enforce that only 'academicCredsAddress' can mint
     modifier onlyAcademicCreds() {
         require(
             msg.sender == academicCredsAddress,
@@ -46,7 +48,7 @@ contract Credential is ERC721,
         _;
     }
 
-    // function to allow the deployer to set the controlling contract address
+    // function to set the 'academicCredsAddress' used in above modifier
     function setAcademicCredsAddress(address _address) public onlyOwner {
         academicCredsAddress = _address;
     }
@@ -71,7 +73,8 @@ contract Credential is ERC721,
         return tokenIds;
     }
 
-    // The following functions are overrides required by Solidity.
+    // the following functions are overrides required by Solidity, and are
+    // provided by the openzeppelin implementation
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal

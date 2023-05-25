@@ -1,3 +1,9 @@
+/* Navigation.js
+**
+** Component to manage & display the logo, title, and navigation elements
+** across the top of the page.
+*******************************************************************************
+*/
 import { useSelector, useDispatch } from 'react-redux'
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form'
@@ -27,11 +33,13 @@ const Navigation = () => {
     // "Connect" button pressed ... load current account
     const account = await loadAccount(dispatch)
 
-    // load the 'isSchool' indicator for this account
+    // load the 'isSchool' indicator (true if registered school acct, else false)
     await loadIsSchool(academicCreds, account, dispatch)
+
+    // load school name for the account (empty string if not a registered school)
     await loadSchoolName(academicCreds, account, dispatch)
 
-    // load the credentials owned by the account
+    // load the credentials owned by the account (empty arrays if none owned)
     await loadOwnedCreds(credentials[0], account, dispatch)
     await loadOwnedCreds(credentials[1], account, dispatch)
   }

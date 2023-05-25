@@ -1,3 +1,8 @@
+/* Alert.js
+**
+** Component to pop a dismissible alert message.
+*******************************************************************************
+*/
 import { Alert as BootstrapAlert } from 'react-bootstrap'
 
 const Alert = ({ message, transactionHash, variant, setShowAlert }) => {

@@ -7,11 +7,10 @@ pragma solidity ^0.8.9;
 // A custom contract to manage the issuing of Academic Credentials
 //
 // Two types of credentials are implemented - transcript and diploma. Each is
-// represented by a 'soulbound' NFT which can be issued to a student account.
+// represented by a 'soulbound' NFT which can be issued to a student's account.
 // ----------------------------------------------------------------------------
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 // import Credential contract - a soulbound version of ERC721
 import "./Credential.sol";
@@ -25,23 +24,11 @@ contract AcademicCreds is Ownable {
     // Every school registered with the system will go in the mapping
     mapping(address => string) public registeredSchools;
 
-    // ----- NOT IMPLEMENTED FOR MVP FUNCTIONALITY ----------------------------
-    //
-    // Every student who receives a credential will get an ID in a mapping
-    //mapping(address => uint256) public registeredStudents;
-    //
-    // set up incremental unique ID assignment for Schools and Students
-    //using Counters for Counters.Counter;
-    //Counters.Counter private _schoolIdCounter;
-    //Counters.Counter private _studentIdCounter;
-    //
-    //string public baseURI;  // not sure this is needed?
-    // ------------------------------------------------------------------------
-
     // event definitions
     event RegisterSchool(address account, string schoolName);
     event IssueCredential(string credName, address account, string uri);
 
+    // the contract is initialized with addresses of the 2 managed tokens
     constructor(Credential _transcriptCred, Credential _diplomaCred) {
         // connect to credential tokens
         transcriptCred = _transcriptCred;

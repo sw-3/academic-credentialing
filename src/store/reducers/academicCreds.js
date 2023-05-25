@@ -1,3 +1,9 @@
+/* academicCreds.js
+**
+** Defines initial state in Redux for data related to the AcademicCreds
+** contract, and the actions to dispatch to write the data to the store.
+*******************************************************************************
+*/
 import { createSlice } from '@reduxjs/toolkit'
 
 export const academicCreds = createSlice({

@@ -1,3 +1,8 @@
+/* ViewTranscripts.js
+**
+** Component to manage & display the View Transcripts tab.
+*******************************************************************************
+*/
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
@@ -111,7 +116,7 @@ const ViewTranscripts = () => {
                                     transcript.recipient_account.slice(38, 42)}</td>
                           <td>{transcript.school_year}</td>
                           <td>{transcript.semester}</td>
-                          <td><a href={transcript.credential_image} target='_blank'>PDF</a></td>
+                          <td><a href={transcript.credential_image} target='_blank' rel='noreferrer'>PDF</a></td>
                           <td>
                             {account === transcript.recipient_account ? (
                               isDeleting ? (
@@ -182,7 +187,7 @@ const ViewTranscripts = () => {
 
       ) : isSuccess && showAlert ? (
         <Alert
-          message={'Succes!'}
+          message={'Success!'}
           transactionHash={transactionHash}
           variant={'success'}
           setShowAlert={setShowAlert}

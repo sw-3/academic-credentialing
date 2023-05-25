@@ -1,11 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux'
+/* Tabs.js
+**
+** Component to manage & display the selection tabs on the page
+*******************************************************************************
+*/
 import Nav from 'react-bootstrap/Nav'
 import { LinkContainer } from "react-router-bootstrap"
 
 const Tabs = () => {
-
-  const isSchoolAccount = useSelector(state => state.academicCreds.isSchool)
-
   return (
     <>
       <LinkContainer to="/">

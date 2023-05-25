@@ -1,3 +1,9 @@
+/* credentials.js
+**
+** Defines initial state in Redux for data related to the 2 Credential.sol
+** contracts, and the actions to dispatch to write the data to the store.
+*******************************************************************************
+*/
 import { createSlice } from '@reduxjs/toolkit'
 
 export const credentials = createSlice({
