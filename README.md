@@ -50,18 +50,25 @@ After the above, you should see output for 3 contracts deployed, and a configura
 
 Your blockchain is now running locally with the Academic Credentials contracts deployed!
 
+**IMPORTANT NOTE:** Compare the 3 deployed contract addresses on the terminal screen, with the first 3 addresses in the **./src/config.json** file. The addresses in the file MUST match the addresses on the screen in this step. If they do not match, *correct the addresses in the config.json file now.*
+
 3. Back in the 2nd terminal:  Enter `npx hardhat run --network localhost ./scripts/seed.js`
 
 You should see output for fetching the 3 deployed contracts, followed by "Registering 2 schools..."
 Note the account addresses of the 2 schools; these are the 2 school accounts which can issue transcripts and diplomas to other accounts. You can add the Hardhat network to your Metamask wallet, and import those account addresses to use them.
+
+### Launch The Front End
+In a 3rd terminal window:  Enter `npm run start`
+This will launch a browser window to display the Academic Credentials Portal application. You must have Metamask (or a compatible wallet) installed in your browser, and within Metamask connect to the local Hardhat network (chainId is 31337).
+
+Finally press the blue **Connect** button in the upper right corner of the Portal.
 
 ### Before Issuing Credentials
 There are 2 example Diplomas, and 4 example Transcripts, included in these 2 directories:
 - example_images/  contains the PDF files
 - example_metadata/ contains the related .json files
 
-These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs. *See the ./scripts/seed.js file for details on how to do this step.*
+These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs. *See the* **./scripts/seed.js** *file for details on how to do this step.*
 
 You can use the *IPFS Desktop* app to run a local IPFS node for this step, and use the "Local Gateway" address for the URI to run everything locally.
 
-### Launch The Front End

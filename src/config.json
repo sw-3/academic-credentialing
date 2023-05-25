@@ -10,7 +10,7 @@
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
     },
     "demoStudent": {
-      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+      "address": ""
     }
   },
   "11155111": {
@@ -22,6 +22,9 @@
     },
     "academicCreds": {
       "address": ""
+    },
+    "demoStudent": {
+      "address": ""
     }
   },
   "80001": {
@@ -32,6 +35,9 @@
       "address": ""
     },
     "academicCreds": {
+      "address": ""
+    },
+    "demoStudent": {
       "address": ""
     }
   }
