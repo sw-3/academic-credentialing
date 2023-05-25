@@ -52,11 +52,16 @@ Your blockchain is now running locally with the Academic Credentials contracts d
 
 3. Back in the 2nd terminal:  Enter `npx hardhat run --network localhost ./scripts/seed.js`
 
-You should see output like this:
-`Registering 2 schools...
-   Great State University registered successfully: 0x...
-   Great Institute of Technology registered successfully: 0x...`
-Note the account addresses, these are the 2 school accounts which can issue transcripts and diplomas to other accounts.
+You should see output for fetching the 3 deployed contracts, followed by "Registering 2 schools..."
+Note the account addresses of the 2 schools; these are the 2 school accounts which can issue transcripts and diplomas to other accounts. You can add the Hardhat network to your Metamask wallet, and import those account addresses to use them.
 
+### Before Issuing Credentials
+There are 2 example Diplomas, and 4 example Transcripts, included in these 2 directories:
+- example_images/  contains the PDF files
+- example_metadata/ contains the related .json files
 
+These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs.
+
+See the ./scripts/seed.js file for details on how to do this step.
+You can use the IPFS Desktop app to run a local IPFS node for this step, and use the "Local Gateway" address for the URI to run everything locally.
 
