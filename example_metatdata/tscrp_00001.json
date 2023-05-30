@@ -4,10 +4,10 @@
   "description": "This is an official college transcript.",
   "date": 1419966000,
   "issuer": "Great State University",
-  "issuer_account": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "issuer_account": "0x28fF8BA5770813FECF676BC0252C91BAB9131785",
   "recipient": "Some J. Student",
-  "recipient_account": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
-  "credential_image": "http://bafybeiegk4n4trk64jpijftmqfpe6dznshtbkrku4rmuk7cix5ux3nc7ke.ipfs.localhost:8080/",
+  "recipient_account": "0x5123E2FA7c1AcBDA1b2f94e9F142B70B94D66A1e",
+  "credential_image": "https://ipfs.io/ipfs/QmPTnyNsMEvgQgit8zwjuiaRsbZjoKARgjTqDmAgiJkNmp/transcript_01.pdf",
   "school_year": "2014-2015",
   "semester": "Fall"
 }

@@ -4,10 +4,10 @@
   "description": "This is an official college transcript.",
   "date": 1609268400,
   "issuer": "Great Institute of Technology",
-  "issuer_account": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+  "issuer_account": "0xDdF1446E16d45631808d8BfcFB3744d56B580BCa",
   "recipient": "Some J. Student",
-  "recipient_account": "",
-  "credential_image": "",
+  "recipient_account": "0xCc711aA92B55cFA4A50Ba80bF2F07617F89bF86A",
+  "credential_image": "https://ipfs.io/ipfs/QmPTnyNsMEvgQgit8zwjuiaRsbZjoKARgjTqDmAgiJkNmp/transcript_05.pdf",
   "school_year": "2020-2021",
   "semester": "Fall"
 }
