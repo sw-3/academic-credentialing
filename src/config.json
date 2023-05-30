@@ -15,13 +15,13 @@
   },
   "11155111": {
     "transcriptCred": {
-      "address": ""
+      "address": "0x610ae367E179fb6fc1A0DEbb60336169F5742c36"
     },
     "diplomaCred": {
-      "address": ""
+      "address": "0xC4B61fd07108f2ba7b70d98f604BDdec171e4277"
     },
     "academicCreds": {
-      "address": ""
+      "address": "0x0Ac1DDFfc4213Ec7F915572d1e6E1Ce92bF4c49F"
     },
     "demoStudent": {
       "address": ""
@@ -29,13 +29,13 @@
   },
   "80001": {
     "transcriptCred": {
-      "address": ""
+      "address": "0x68cDC45795Ec71497cD60D04B69E5B8376f90d1F"
     },
     "diplomaCred": {
-      "address": ""
+      "address": "0xADEDEDf8b8642EcAE78746d65798078CfdAc890d"
     },
     "academicCreds": {
-      "address": ""
+      "address": "0x98E13a684E7714c8CF42Ae5329d95B16101960B7"
     },
     "demoStudent": {
       "address": ""
