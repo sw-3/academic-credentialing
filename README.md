@@ -2,17 +2,17 @@
 
 This project is a proof-of-concept for a better way to issue and manage official academic transcripts and diplomas.
 
-It is also a use case for the concept of "Soulbound Tokens" and is implemented as such.
+It is also a use case for the concept of **Soulbound Tokens**.
 
 ## Contents
-[Credentials As Soulbound NFT Tokens](#soulbound)
-[The Credentialing Process](#process)
-[Project Components](#components)
-[Technologies Used](#tech)
-[Installation](#install)
-[Run the POC Locally](#run_local)
-[Launch The Front End](#front_end)
-[Before Issuing Credentials](#fbefore)
+[Credentials As Soulbound NFT Tokens](#soulbound)<br />
+[The Credentialing Process](#process)<br />
+[Project Components](#components)<br />
+[Technologies Used](#tech)<br />
+[Installation](#install)<br />
+[Run the POC Locally](#run_local)<br />
+[Launch The Front End](#front_end)<br />
+[Before Issuing Credentials](#fbefore)<br />
 
 ## Credentials As *Soulbound* NFT Tokens {#soulbound}
 Credentials are unique to a single person and will not be sold or traded. Consequently, this POC overrides the ERC721 Approve and Transfer functions to prevent a Credential from being transferred out of the initial recipient's wallet. The token is "soulbound" to the recipient forever.
