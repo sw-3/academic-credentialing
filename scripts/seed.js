@@ -73,12 +73,15 @@ async function main() {
 ** 1) store the PDF file of the credential in IPFS, and get the URI
 ** 2) add the URI from step 1 to the .json metadata for the credential as the
 **    "credential_image" value
-** 3) store the .json metadata in IPFS and get the URI of the metadata
-** 4) set a URI value in the script below to the URI from step 3
+** 3) set the "issuer_account" in the .json to one of the 2 school accounts
+**    that were registered by this script (Hardhat account #1 or #2)
+** 4) set the "recipient_account" in the .json to Hardhat account #3
+** 5) store the .json metadata in IPFS and get the URI of the metadata
+** 6) set a URI value in the script below to the URI from step 3
 **
-** Alternatively, you can comment out the section below, and issue transcripts
-** and diplomas via the 2 Hardhat school accounts connected to the frontend.
-** (You still need to store the metadata/PDF on IPFS first, step 1-3 above)
+** Alternatively, you can leave the below section commented out, and issue
+** transcripts & diplomas via the 2 school accounts when connected to the frontend.
+** (You still need to store the metadata/PDF on IPFS first, step 1-6 above)
 **
 ******************************************************************************/
 
