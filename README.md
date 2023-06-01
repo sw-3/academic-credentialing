@@ -5,23 +5,23 @@ This project is a proof-of-concept for a better way to issue and manage official
 It is also a use case for the concept of **Soulbound Tokens**.
 
 ## Contents
-[Credentials As Soulbound NFT Tokens](#soulbound)<br />
-[The Credentialing Process](#process)<br />
-[Project Components](#components)<br />
-[Technologies Used](#tech)<br />
-[Installation](#install)<br />
-[Run the POC Locally](#run_local)<br />
-[Launch The Front End](#front_end)<br />
-[Before Issuing Credentials](#fbefore)<br />
+[Credentials As Soulbound NFT Tokens](#credentials-as-soulbound-nft-tokens)<br />
+[The Credentialing Process](#the-credentialing-process)<br />
+[Project Components](#project-components)<br />
+[Technologies Used](#technologies-used)<br />
+[Installation](#installation)<br />
+[Run the POC Locally](#run-the-poc-locally)<br />
+[Launch The Front End](#launch-the-front-end)<br />
+[Before Issuing Credentials](#before-issuing-credentials)<br />
 
-## Credentials As *Soulbound* NFT Tokens {#soulbound}
+## Credentials As *Soulbound* NFT Tokens
 Credentials are unique to a single person and will not be sold or traded. Consequently, this POC overrides the ERC721 Approve and Transfer functions to prevent a Credential from being transferred out of the initial recipient's wallet. The token is "soulbound" to the recipient forever.
 
 Enforcing this soulbound aspect on-chain *establishes legitimate ownership*, because a wallet can only possess credentials that were issued directly to it by a known school via the AcademicCreds contract.
 
 I implemented an owner-only method to **delete** un-needed credentials from their wallet and off the blockchain. A student receives a transcript every semester, but they most likely need to retain only the latest transcript from a school. Deleting an old credential is accomplished throught the normal burn function provided by the OpenZeppelin NFT contract
 
-## The Credentialing Process {#process}
+## The Credentialing Process
 A school issues credentials as NFT tokens, via the *Academic Credentials Portal* website.  The Credential token is minted directly into a student's blockchain account. Then the student (or others who need to see the student's credentials) will browse to the web portal to view the credentials in the student's account. Each NFT consists of the actual issued credential (a PDF file) and metadata which ensures validity (such as the issue date and issuer account).
 
 "Fake" credentials are prevented in the following ways.
@@ -29,21 +29,22 @@ A school issues credentials as NFT tokens, via the *Academic Credentials Portal*
 - The Credential contract's *mint* function is overridden, to only allow the AcademicCreds smart contract address to call it.  If any account other than the controlling contract calls the *mint* function, it will fail.
 - Because data on a blockchain is immutable, a properly issued transcript or diploma cannot be modified later.
 
-## Project Components {#components}
+## Project Components
 The POC consists of 2 smart contracts and a web front end:
 - **AcademicCreds.sol** is the controlling contract which issues and displays transcripts and diplomas.
 - **Credential.sol** inherits from Openzeppelin's ERC721 NFT contract. It is deployed once for each type of credential; 'Transcript' and 'Diploma'.
 - **Academic Credentials Portal** is the front end which talks to the AcademicCreds contract.
 
-## Technologies Used {#tech}
+## Technologies Used
 - **react.js**  This project was built with v 18.2.0
 - **node.js v16.X:**  This project was built with v 16.14.2.  Run `node -v` to see your version of node.
 - **nvm:**  This project was built with v 0.39.3.  Run `nvm -v` to see your version of nvm.
 - **npm:**  This project was built with v 9.6.2.  Run `npm -v` to see your version of npm.
 - **hardhat:**  This project is using v 2.14.0.  Run `npx hardhat --version` to see your version.
 - **solidity:**  Built with v0.8.18; this should be set in the *hardhat.config.js* file.
+- **IPFS:**  Used for decentralized storage of the credential metadata and PDF files.
 
-## Installation {#install}
+## Installation
 This is a Hardhat/Solidity project running React.js on the front end. It was bootstrapped with *create-react-app*.
 
 1. In a terminal session:  Clone the repo onto your local machine, and cd to the main directory.
@@ -52,7 +53,7 @@ This is a Hardhat/Solidity project running React.js on the front end. It was boo
 
 If things are working, you should see 24 total passing tests, for the AcademicCreds & Credential contracts.
 
-## Run the POC Locally {#run_local}
+## Run the POC Locally
 1. In a terminal session:  Enter `npx hardhat node` to launch a blockchain node on your computer
 2. In a 2nd terminal session:  Enter `npx hardhat run --network localhost ./scripts/deploy.js`
 
@@ -69,13 +70,13 @@ Note the account addresses of the 2 schools; these are the 2 school accounts whi
 
 4. You can add the Hardhat network (chainId is 31337) to your Metamask wallet, and import the 2 school account addresses to use them.
 
-## Launch The Front End {#front_end}
+## Launch The Front End
 In a 3rd terminal window:  Enter `npm run start`
 This will launch a browser window to display the Academic Credentials Portal application. You must have Metamask (or a compatible wallet) installed in your browser, and within Metamask connect to the local Hardhat network (chainId is 31337).
 
 Finally press the blue **Connect** button in the upper right corner of the Portal.
 
-## Before Issuing Credentials {#before}
+## Before Issuing Credentials
 There are 2 example Diplomas, and 5 example Transcripts, included in these 2 directories:
 - example_images/  contains the PDF files
 - example_metadata/ contains the related .json files
