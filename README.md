@@ -55,7 +55,7 @@ This is a Hardhat/Solidity project running React.js on the front end. It was boo
 If things are working, you should see 24 total passing tests, for the AcademicCreds & Credential contracts.
 
 ## Run the POC Locally
-1. In a terminal session:  Enter `npx hardhat node` to launch a blockchain node on your computer
+1. In a terminal session:  Enter `npx hardhat node` to launch a blockchain node on your computer. (Note the output generated; you will use the addresses for Hardhat accounts #1 and #2 for this project.)
 2. In a 2nd terminal session:  Enter `npx hardhat run --network localhost ./scripts/deploy.js`
 
 After the above, you should see output for 3 contracts deployed, and a configuration step for the 2 Credential contracts.  In the terminal window that is running the blockchain node, you should see that the deploy & configure transactions ran successfully.
@@ -69,7 +69,7 @@ Your blockchain is now running locally with the Academic Credentials contracts d
 You should see output for fetching the 3 deployed contracts, followed by "Registering 2 schools..."
 Note the account addresses of the 2 schools; these are the 2 school accounts which can issue transcripts and diplomas to other accounts.
 
-4. You can add the Hardhat network (chainId 31337) to your Metamask wallet, and import the 2 school account addresses to use them.
+4. You can add the Hardhat network (chainId 31337) to your Metamask wallet, and import the 2 school account addresses to use them. You can import additional Hardhat accounts into Metamask to act as student wallets.
 
 ## Launch The Front End
 In a 3rd terminal window:  Enter `npm run start`.<br />
