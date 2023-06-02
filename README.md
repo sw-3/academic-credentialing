@@ -13,6 +13,7 @@ It is also a use case for the concept of **Soulbound Tokens**.
 - [Run the POC Locally](#run-the-poc-locally)<br />
 - [Launch The Front End](#launch-the-front-end)<br />
 - [Before Issuing Credentials](#before-issuing-credentials)<br />
+- [TODO](#todo)<br />
 
 ## Credentials As *Soulbound* NFT Tokens
 Credentials are unique to a single person and will not be sold or traded. Consequently, this POC overrides the ERC-721 Approve and Transfer functions to prevent a Credential from being transferred out of the initial recipient's wallet. The token is "soulbound" to the recipient forever.
@@ -85,3 +86,9 @@ There are 2 example Diplomas, and 5 example Transcripts, included in these 2 dir
 These example credentials need to be stored in IPFS properly, so you can enter the IPFS URI location on the Issue Transcripts/Diplomas tabs. *See the* **./scripts/seed.js** *file for details on how to do this step.*
 
 You can use the *IPFS Desktop* app to run a local IPFS node for this step, and use the "Local Gateway" address for the URI. This allows you to run everything locally and also store the data locally.
+
+## TODO
+There are some things that still need done, or at least could be done to improve this work.
+- Refactor the components because there is so much repeated code on the front end.
+- The "issue" form should allow entry of all the metadata, create the json file and upload it to IPFS before minting the credential. This would make it much easier to get the credential data created and moved to IPFS, and would be more like the real-world process would work.
+- Create a "Register School" form/tab. It would only be viewable by the deployer of the contracts, and allow accounts to be registered as schools with an easy form.
