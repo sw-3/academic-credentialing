@@ -90,5 +90,7 @@ You can use the *IPFS Desktop* app to run a local IPFS node for this step, and u
 ## TODO
 There are some things that still need done, or at least could be done to improve this work.
 - Refactor the components because there is so much repeated code on the front end.
-- The "issue" form should allow entry of all the metadata, create the json file and upload it to IPFS before minting the credential. This would make it much easier to get the credential data created and moved to IPFS, and would be more like the real-world process would work.
 - Create a "Register School" form/tab. It would only be viewable by the deployer of the contracts, and allow accounts to be registered as schools with an easy form.
+- Easier cretion of the credential and metadata. 
+    - The "issue" form could allow entry of all the metadata, create the json file and upload it to IPFS before minting the credential. This would require a stable IPFS node.
+    - Could have a new "create credential metadata" form. This would enforce having all required values, and would allow saving the metadata json file. The school would then make it available at a URI location before issuing the credential.
